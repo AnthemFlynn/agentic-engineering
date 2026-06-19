@@ -1,7 +1,6 @@
 # Agentic Engineering
 
 ![Knowledge base](https://img.shields.io/badge/knowledge%20base-agentic%20engineering-6E40C9)
-![Notes](https://img.shields.io/badge/notes-56-2EA043)
 ![Format](https://img.shields.io/badge/format-atomic%20%C2%B7%20wiki--linked-0969DA)
 ![Content](https://img.shields.io/badge/content-markdown-000000)
 [![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey)](LICENSE)
@@ -41,7 +40,7 @@ This is an **independent, unofficial** knowledge base, not affiliated with any v
 3. Name the file `kebab-case-of-the-takeaway.md`.
 4. Link related notes inline with `[[note-slug]]` wiki-links, and add the note under the `## Notes` heading of its area README.
 
-See [CLAUDE.md](CLAUDE.md) for the authoring conventions in full.
+New contributors: see [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, and [CLAUDE.md](CLAUDE.md) for the authoring conventions in detail.
 
 ## License
 
