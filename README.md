@@ -21,6 +21,6 @@ Each entry is a single focused Markdown file with [structured frontmatter](TEMPL
 1. Pick the area it belongs to (or propose a new one — add the directory and a `README.md` describing its scope).
 2. Copy [`TEMPLATE.md`](TEMPLATE.md), fill in the frontmatter, write the entry.
 3. Name the file `kebab-case-of-the-takeaway.md`.
-4. Link related entries inline.
+4. Link related notes inline with `[[note-slug]]` wiki-links, and add the note under the `## Notes` heading of its area README.
 
 See [CLAUDE.md](CLAUDE.md) for the authoring conventions in full.

@@ -31,4 +31,5 @@ artifacts carry the signal; prefer them over abstract description.
 
 ## Notes
 
-Caveats, related entries (link them), open questions, things still to verify.
+Caveats, open questions, things still to verify. Link related notes with
+`[[note-slug]]` wiki-links (slug = target filename without `.md`).

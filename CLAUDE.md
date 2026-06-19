@@ -47,7 +47,8 @@ The body follows the template's sections: **Takeaway → When it applies → Why
 - **Use absolute dates.** Convert "last week" to an ISO date. Set `date:` on creation; bump `updated:` on substantive edits.
 - **Mark version sensitivity.** Anything tied to a specific model, SDK, or Claude Code release sets `model:`/`version:` so a future reader knows whether it still holds.
 - **Be honest about confidence.** `proven` = repeatedly validated; `anecdotal` = worked in a real case or two; `hypothesis` = untested idea. Label it accurately — the base earns trust by labeling uncertainty.
-- **Link related entries** inline by relative path.
+- **Link related notes** inline with `[[note-slug]]` wiki-links, where the slug is the target filename without `.md` (e.g. `[[external-grader-loop]]`). Slugs are location-independent — link by slug regardless of folder. A `[[slug]]` that doesn't resolve yet is fine: it marks a note worth writing. Use relative-path Markdown links only for navigation between READMEs.
+- **Index notes in their area README.** When you add a note, add a bullet linking it under the `## Notes` heading of that folder's `README.md`.
 
 ## Working in this repo
 
