@@ -13,7 +13,7 @@ Each entry is a single focused Markdown file with [structured frontmatter](TEMPL
 | [evals/](evals/) | Eval-driven development, rubrics, graders, LLM-as-judge, regression testing, datasets. |
 | [orchestration/](orchestration/) | Multi-agent topologies, autonomous loops, fan-out/pipeline, DAGs, handoffs, worktrees. |
 | [models/](models/) | Model selection, routing by task complexity, cost control, prompt caching, token budgeting. |
-| [tooling/](tooling/) | Claude Code (skills, subagents, hooks, MCP, slash commands) and other agent harnesses/CLIs. |
+| [tooling/](tooling/) | Tool-specific knowledge by category — [harnesses](tooling/harnesses/) (Claude Code, OpenCode, Codex), CLIs, MCP servers, skills, and hooks. |
 | [patterns/](patterns/) | Cross-cutting reusable patterns that don't belong to a single topic above. |
 
 ## Adding an entry

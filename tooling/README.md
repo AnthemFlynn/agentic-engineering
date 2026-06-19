@@ -1,7 +1,15 @@
 # Tooling
 
-The concrete platforms and CLIs used to build and run agents.
+The concrete platforms and CLIs used to build and run agents, organized by tool category.
 
-**In scope:** Claude Code specifics (skills, subagents, hooks, slash commands, MCP servers, settings), the Claude Agent SDK and Claude API, and other agent harnesses/CLIs (Codex, OpenCode, etc.). Setup, gotchas, and version-specific behavior of the tools themselves.
+A technique belongs here only when it is genuinely tied to a specific tool — vendor-neutral design ideas go in their concept area ([harness-design/](../harness-design/), [orchestration/](../orchestration/), etc.).
 
-**Out of scope:** vendor-neutral design ideas, which belong with the relevant concept area ([harness-design/](../harness-design/), [orchestration/](../orchestration/), etc.). Put a technique here only when it is genuinely tied to a specific tool.
+## Categories
+
+| Folder | What lives here |
+|--------|-----------------|
+| [harnesses/](harnesses/) | Full agentic harnesses that run the agent loop — Claude Code, OpenCode, Codex. |
+| [clis/](clis/) | Standalone command-line tools agents drive or depend on. |
+| [mcps/](mcps/) | Model Context Protocol servers — setup, configuration, gotchas. |
+| [skills/](skills/) | Agent skills — authoring, structure, discovery, distribution. |
+| [hooks/](hooks/) | Lifecycle hooks (PreToolUse, PostToolUse, Stop, …) and what to wire them to. |
