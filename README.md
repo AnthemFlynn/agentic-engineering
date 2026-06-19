@@ -27,21 +27,6 @@ Each entry is one focused **atomic note** with [structured frontmatter](TEMPLATE
 - **Topic-first** — filed by subject, not by form. Whether a note is a pattern, tip, or reference is captured in frontmatter, not by folder.
 - **Wiki-linked** — related notes connect via `[[note-slug]]`, so you can follow a thread across areas. Each area's `README.md` indexes its notes.
 
-## Sources & provenance
-
-These notes are **distilled and synthesized** from public documentation and the practitioner community — e.g. Anthropic's Claude Code docs, publicly shared workflows, and community projects. Every note's `source:` frontmatter cites where its claims come from, and `confidence:` flags how well-established each claim is (`proven` / `anecdotal` / `hypothesis`).
-
-This is an **independent, unofficial** knowledge base, not affiliated with any vendor. Agentic tooling moves fast: notes carry `version:`/`date:` fields, but **verify version-sensitive details against primary sources** before relying on them.
-
-## Adding an entry
-
-1. Pick the area it belongs to (or propose a new one — add the directory and a `README.md` describing its scope).
-2. Copy [`TEMPLATE.md`](TEMPLATE.md), fill in the frontmatter, write the entry.
-3. Name the file `kebab-case-of-the-takeaway.md`.
-4. Link related notes inline with `[[note-slug]]` wiki-links, and add the note under the `## Notes` heading of its area README.
-
-New contributors: see [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, and [CLAUDE.md](CLAUDE.md) for the authoring conventions in detail.
-
 ## License
 
 Licensed under [Creative Commons Attribution 4.0 International](LICENSE) (CC BY 4.0). You're free to share and adapt with attribution. Individual notes cite their upstream `source:` in frontmatter — those original works remain under their own terms; please preserve that credit when reusing.

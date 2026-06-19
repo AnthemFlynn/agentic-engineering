@@ -9,3 +9,9 @@ Agent skills as a **cross-harness concept** — packaged, reusable units of spec
 ## Notes
 
 - [frontend-design + Vercel UI (creative direction + quality gate)](frontend-design-and-ui-quality.md)
+
+## Repos to watch
+
+External skill collections worth following for reusable skills and authoring ideas:
+
+- [mattpocock/skills](https://github.com/mattpocock/skills) — Matt Pocock's collection of agent skills.
