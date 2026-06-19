@@ -6,7 +6,7 @@ date: 2026-06-18
 model:
 version: Claude Code v2.1.x
 tags: [claude-code, settings, permissions, hooks, enforcement]
-source: claude-code-pro-playbook.md (Pattern 2, combined config)
+source: claude-code-pro-playbook.md (Pattern 2, combined config); claude-code-field-guide-may2026.md (section 9)
 ---
 
 ## Takeaway
@@ -39,5 +39,5 @@ Wire the four hooks from [[auto-format-on-write]], [[block-destructive-bash]], [
 
 ## Notes
 
-- `deny` makes files invisible (e.g. `.env`) — the ENFORCEMENT layer of the [[enforcement-layer-cake]]. In headless runs the equivalent hard boundary is [[allowed-tools-hard-contract]].
+- Permissions evaluate **deny-first**. A denied file isn't just blocked — it's *invisible* to Claude, which is more secure than blocking via a hook (a hook can still leak the file's existence). The ENFORCEMENT layer of the [[enforcement-layer-cake]]; in headless runs the equivalent hard boundary is [[allowed-tools-hard-contract]], with [[auto-permission-mode-for-ci]] adding a classifier pass.
 - When a hook doesn't fire, see [[debugging-hooks]].

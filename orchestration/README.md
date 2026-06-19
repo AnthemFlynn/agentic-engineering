@@ -12,3 +12,4 @@ Wiring multiple agents — or multiple turns of one agent — into a larger syst
 - [Context focus beats parallelism](context-focus-beats-parallelism.md)
 - [Competing hypotheses with an integrator](competing-hypotheses-with-integrator.md)
 - [The enforcement layer-cake](enforcement-layer-cake.md)
+- [Skills → Subagents → Agent Teams spectrum](skills-subagents-agent-teams-spectrum.md)

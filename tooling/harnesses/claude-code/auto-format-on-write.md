@@ -6,7 +6,7 @@ date: 2026-06-18
 model:
 version: Claude Code v2.1.x
 tags: [claude-code, hooks, formatting]
-source: claude-code-pro-playbook.md (Pattern 2, Hook 1)
+source: claude-code-pro-playbook.md (Pattern 2, Hook 1); claude-code-field-guide-may2026.md (section 2)
 ---
 
 ## Takeaway
@@ -42,3 +42,4 @@ Prefer the repo's own formatter entrypoint (`pnpm prettier`, `pnpm eslint --fix`
 ## Notes
 
 - Part of the [[committed-settings-json-baseline]]. PostToolUse, so it runs *after* the write — pair with PreToolUse guards ([[protect-sensitive-files]]) to stop bad writes before disk.
+- **Token-cost caution:** formatting on every edit can burn significant context (one report: ~160K tokens over 3 rounds). On long sessions, consider formatting between sessions instead of on every write. Relates to [[manage-context-as-finite-resource]].

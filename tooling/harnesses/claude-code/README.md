@@ -8,6 +8,9 @@ Anthropic's agentic coding harness — CLI, desktop, web, and IDE extensions.
 
 ## Notes
 
+**Getting started**
+- [Team quickstart (4 steps)](team-quickstart.md)
+
 **CLAUDE.md**
 - [Living document + correction loop](claude-md-living-document.md)
 - [Known wrong-defaults block](claude-md-known-wrong-defaults.md)
@@ -32,6 +35,7 @@ Anthropic's agentic coding harness — CLI, desktop, web, and IDE extensions.
 - [Encode repeated workflows as a skill (create-pr)](create-pr-skill.md)
 
 **Session & CI workflows**
+- [Spec-driven workflow (plan mode → execute)](spec-driven-workflow.md)
 - [Writer/reviewer loop (fresh-context review)](writer-reviewer-loop.md)
 - [Worktrees for parallel features](worktrees-parallel-features.md)
 - [Vertical-slice prompt](vertical-slice-prompt.md)
@@ -40,3 +44,4 @@ Anthropic's agentic coding harness — CLI, desktop, web, and IDE extensions.
 **Config & enforcement**
 - [Committed settings.json baseline (permissions + hooks)](committed-settings-json-baseline.md)
 - [`--allowedTools` as a hard contract](allowed-tools-hard-contract.md)
+- [`auto` permission mode for CI](auto-permission-mode-for-ci.md)

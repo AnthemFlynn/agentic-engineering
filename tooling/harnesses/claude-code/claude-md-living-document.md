@@ -6,7 +6,7 @@ date: 2026-06-18
 model:
 version: Claude Code v2.1.x
 tags: [claude-code, claude-md, context]
-source: claude-code-pro-playbook.md (Pattern 1)
+source: claude-code-pro-playbook.md (Pattern 1); claude-code-field-guide-may2026.md (section 1)
 ---
 
 ## Takeaway
@@ -34,6 +34,13 @@ The highest-value section is an explicit list of what Claude gets wrong without 
 ```
 
 The correction loop in practice: when Claude writes `npm test` a third time → "Add to CLAUDE.md: this project uses pnpm, not npm. Always use pnpm." Claude edits the file; you commit it.
+
+## Authoring
+
+- **Bootstrap, don't hand-write.** Run `/init` to generate a starter from the codebase, then curate aggressively — Boris Cherny runs his at ~100 lines; the community caps at 200.
+- **One test per line:** "would removing this cause Claude to make a mistake?" If not, cut it.
+- **WHAT / WHY / HOW per rule.** Not "never use `--foo`" but "never use `--foo` (it write-locks the DB layer); use `--baz` instead (docs/db.md)." Negative-only rules with no alternative get Claude stuck.
+- **Hierarchy** (all but the first committed): `~/.claude/CLAUDE.md` personal · `.claude/CLAUDE.md` team/repo · `packages/api/CLAUDE.md` module subtree.
 
 ## Notes
 

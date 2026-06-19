@@ -10,3 +10,4 @@ Prompt and context engineering — what goes into the context window and how it'
 
 - [Compound CLAUDE.md with @import](compound-claude-md-dynamic-import.md)
 - [MEMORY.md session handoff](memory-md-session-handoff.md)
+- [Manage context as a finite resource](manage-context-as-finite-resource.md)
