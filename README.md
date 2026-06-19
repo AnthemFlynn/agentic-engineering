@@ -1,8 +1,13 @@
 # Agentic Engineering
 
-A curated knowledge base of patterns, tips, tricks, hacks, and hard-won lessons for building and operating AI agents.
+![Knowledge base](https://img.shields.io/badge/knowledge%20base-agentic%20engineering-6E40C9)
+![Notes](https://img.shields.io/badge/notes-56-2EA043)
+![Format](https://img.shields.io/badge/format-atomic%20%C2%B7%20wiki--linked-0969DA)
+![Content](https://img.shields.io/badge/content-markdown-000000)
 
-Each entry is a single focused Markdown file with [structured frontmatter](TEMPLATE.md), filed under the topic it belongs to.
+> A curated, source-cited knowledge base of patterns, tips, and hard-won lessons for **building and operating AI agents** — harness design, prompting, evals, orchestration, model economics, and the tooling around them.
+
+Each entry is one focused **atomic note** with [structured frontmatter](TEMPLATE.md) and `[[wiki-links]]` between related ideas, filed under the topic it belongs to. Browse by area below, or follow the links between notes.
 
 ## Areas
 
@@ -13,8 +18,20 @@ Each entry is a single focused Markdown file with [structured frontmatter](TEMPL
 | [evals/](evals/) | Eval-driven development, rubrics, graders, LLM-as-judge, regression testing, datasets. |
 | [orchestration/](orchestration/) | Multi-agent topologies, autonomous loops, fan-out/pipeline, DAGs, handoffs, worktrees. |
 | [models/](models/) | Model selection, routing by task complexity, cost control, prompt caching, token budgeting. |
-| [tooling/](tooling/) | Tool-specific knowledge by category — [harnesses](tooling/harnesses/) (Claude Code, OpenCode, Codex), CLIs, MCP servers, skills, and hooks. |
+| [tooling/](tooling/) | Tool-specific knowledge by category — [harnesses](tooling/harnesses/) (Claude Code, OpenCode, Codex, Antigravity), [plugins](tooling/plugins/), CLIs, MCP servers, skills, and hooks. |
 | [patterns/](patterns/) | Cross-cutting reusable patterns that don't belong to a single topic above. |
+
+## How it's organized
+
+- **Atomic notes** — one idea per file, so each is independently citable and linkable.
+- **Topic-first** — filed by subject, not by form. Whether a note is a pattern, tip, or reference is captured in frontmatter, not by folder.
+- **Wiki-linked** — related notes connect via `[[note-slug]]`, so you can follow a thread across areas. Each area's `README.md` indexes its notes.
+
+## Sources & provenance
+
+These notes are **distilled and synthesized** from public documentation and the practitioner community — e.g. Anthropic's Claude Code docs, publicly shared workflows, and community projects. Every note's `source:` frontmatter cites where its claims come from, and `confidence:` flags how well-established each claim is (`proven` / `anecdotal` / `hypothesis`).
+
+This is an **independent, unofficial** knowledge base, not affiliated with any vendor. Agentic tooling moves fast: notes carry `version:`/`date:` fields, but **verify version-sensitive details against primary sources** before relying on them.
 
 ## Adding an entry
 

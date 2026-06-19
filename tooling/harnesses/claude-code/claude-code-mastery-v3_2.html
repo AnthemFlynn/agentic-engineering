@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Mastery — Dev Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Page */
+  --page:#F3F1EB;
+  --card:#FFFFFF;
+  --card2:#F8F6F1;
+  --border:rgba(0,0,0,0.08);
+  --border2:rgba(0,0,0,0.14);
+  --border3:rgba(0,0,0,0.22);
+  --text:#18170F;
+  --muted:#6B6963;
+  --muted2:#A09C97;
+  --amber:#A8701A;
+  --amber-bg:rgba(168,112,26,0.08);
+  --amber-border:rgba(168,112,26,0.22);
+
+  /* Sidebar */
+  --sb:#111009;
+  --sb2:#181613;
+  --sb-text:#C5C2BB;
+  --sb-muted:#5C5A56;
+  --sb-border:rgba(255,255,255,0.05);
+  --sb-w:210px;
+
+  /* Level colors (dark enough for light bg) */
+  --l1:#5A5956;         --l1bg:rgba(90,89,86,0.07);    --l1br:rgba(90,89,86,0.25);
+  --l2:#186BAD;         --l2bg:rgba(24,107,173,0.07);   --l2br:rgba(24,107,173,0.25);
+  --l3:#5750C1;         --l3bg:rgba(87,80,193,0.07);    --l3br:rgba(87,80,193,0.25);
+  --l4:#BE431E;         --l4bg:rgba(190,67,30,0.07);    --l4br:rgba(190,67,30,0.25);
+  --elite:#9A6B1C;      --elitebg:rgba(154,107,28,0.07);--elitebr:rgba(154,107,28,0.25);
+
+  /* Typography */
+  --font-d:'Instrument Serif',Georgia,serif;
+  --font-m:'JetBrains Mono',monospace;
+  --font-b:'DM Sans',system-ui,sans-serif;
+
+  /* Misc */
+  --tb:44px;
+  --r:8px;
+  --r2:12px;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);color:var(--text);background:var(--page);font-size:14px;line-height:1.65}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:var(--tb);
+  background:var(--sb);
+  border-bottom:1px solid var(--sb-border);
+  display:flex;align-items:center;
+  padding:0 20px 0 calc(var(--sb-w) + 20px);
+  gap:20px;
+}
+.tb-brand{
+  font-family:var(--font-m);font-size:12px;font-weight:700;
+  color:#E8E5DF;letter-spacing:0.06em;white-space:nowrap;
+}
+.tb-hint{
+  font-family:var(--font-m);font-size:10px;
+  color:var(--sb-muted);letter-spacing:0.04em;
+}
+.tb-meta{font-family:var(--font-m);font-size:10px;color:var(--sb-muted);margin-left:auto;white-space:nowrap}
+
+/* ─── LAYOUT ─── */
+.layout{display:flex;padding-top:var(--tb);min-height:100vh}
+
+/* ─── SIDEBAR ─── */
+.sidebar{
+  position:fixed;top:var(--tb);left:0;bottom:0;
+  width:var(--sb-w);
+  background:var(--sb);
+  border-right:1px solid var(--sb-border);
+  overflow-y:auto;z-index:200;
+  scrollbar-width:thin;
+  scrollbar-color:var(--sb-muted) transparent;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--sb-muted);border-radius:2px}
+
+.sidenav{padding:16px 0 40px}
+.sn-brand{
+  padding:0 16px 14px;
+  font-family:var(--font-m);font-size:11px;font-weight:700;
+  color:#E8E5DF;letter-spacing:0.06em;
+  border-bottom:1px solid var(--sb-border);
+  margin-bottom:14px;
+}
+
+.sn-group{margin-bottom:2px}
+.sn-lv{
+  display:flex;align-items:center;gap:8px;
+  padding:5px 16px;
+  font-family:var(--font-m);font-size:10px;font-weight:700;
+  color:var(--sb-muted);
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;text-decoration:none;
+  transition:color 0.15s;
+  white-space:nowrap;
+}
+.sn-lv:hover{color:var(--sb-text)}
+.sn-lv.active{color:#E8E5DF}
+.sn-lv-dot{
+  width:5px;height:5px;border-radius:50%;flex-shrink:0;
+  background:var(--lc,var(--l1));opacity:0.5;transition:opacity 0.15s;
+}
+.sn-lv.active .sn-lv-dot{opacity:1}
+
+.sn-pats{padding:2px 0 8px}
+.sn-p{
+  display:block;
+  padding:3px 16px 3px 29px;
+  font-size:11.5px;font-weight:300;
+  color:var(--sb-muted);
+  text-decoration:none;
+  transition:color 0.12s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sn-p:hover{color:var(--sb-text)}
+.sn-p.active{color:#B8B4AE}
+
+.sn-div{height:1px;background:var(--sb-border);margin:10px 14px}
+
+.sn-theline{
+  padding:6px 16px;
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  color:rgba(190,67,30,0.6);letter-spacing:0.14em;text-transform:uppercase;
+}
+.sn-elite{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 16px;
+  font-family:var(--font-m);font-size:10px;font-weight:700;
+  color:rgba(154,107,28,0.7);letter-spacing:0.08em;
+  text-decoration:none;transition:color 0.15s;
+}
+.sn-elite:hover,.sn-elite.active{color:#C9A04E}
+
+/* ─── MAIN CONTENT ─── */
+.main{
+  margin-left:var(--sb-w);
+  flex:1;
+  max-width:860px;
+  padding:40px 48px 80px;
+}
+
+/* ─── OVERVIEW BLOCK ─── */
+.overview{
+  padding:28px 32px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  margin-bottom:48px;
+}
+.ov-tag{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:12px;
+}
+.ov-title{
+  font-family:var(--font-d);font-size:28px;font-weight:400;
+  line-height:1.1;color:var(--text);margin-bottom:10px;
+}
+.ov-title em{font-style:italic;color:var(--amber)}
+.ov-body{font-size:13.5px;font-weight:300;color:var(--muted);line-height:1.72;max-width:560px}
+.ov-ladder{
+  display:flex;gap:3px;margin-top:20px;flex-wrap:wrap;
+}
+.ov-seg{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;
+  border-radius:var(--r);
+  font-family:var(--font-m);font-size:10px;font-weight:600;
+  border:1px solid;
+}
+.seg-l1{color:var(--l1);border-color:var(--l1br);background:var(--l1bg)}
+.seg-l2{color:var(--l2);border-color:var(--l2br);background:var(--l2bg)}
+.seg-l3{color:var(--l3);border-color:var(--l3br);background:var(--l3bg)}
+.seg-l4{color:var(--l4);border-color:var(--l4br);background:var(--l4bg)}
+.seg-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.seg-own{font-weight:300;opacity:0.7;font-size:9px}
+
+/* ─── LEVEL SECTION ─── */
+.level{
+  margin-bottom:56px;
+  scroll-margin-top:calc(var(--tb) + 20px);
+}
+.lv-head{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:16px;
+  border-bottom:2px solid var(--lc-br,var(--l1br));
+  margin-bottom:20px;
+}
+.lv-num{
+  font-family:var(--font-m);font-size:11px;font-weight:700;
+  color:var(--lc,var(--l1));opacity:0.6;letter-spacing:0.06em;
+}
+.lv-badge-text{
+  font-family:var(--font-m);font-size:10px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--lc,var(--l1));
+  padding:2px 8px;
+  border-radius:20px;
+  border:1px solid var(--lc-br,var(--l1br));
+  background:var(--lc-bg,var(--l1bg));
+}
+.lv-name-text{
+  font-family:var(--font-d);font-size:22px;font-weight:400;
+  color:var(--text);line-height:1;
+}
+.lv-own{
+  margin-left:auto;
+  font-family:var(--font-m);font-size:10px;font-weight:500;
+  color:var(--muted2);white-space:nowrap;
+}
+
+.lv-tag-text{
+  font-size:13.5px;font-weight:300;color:var(--muted);
+  line-height:1.65;margin-bottom:14px;
+}
+
+/* ─── TEST BLOCK ─── */
+.the-test{
+  padding:14px 18px;
+  background:var(--lc-bg,var(--l1bg));
+  border:1px solid var(--lc-br,var(--l1br));
+  border-radius:var(--r);
+  margin-bottom:20px;
+}
+.test-lbl{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--lc,var(--l1));margin-bottom:6px;
+}
+.test-q{
+  font-family:var(--font-d);font-style:italic;
+  font-size:15px;color:var(--text);line-height:1.5;
+}
+
+/* ─── SECTION LABEL ─── */
+.sec-lbl{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--muted2);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ─── PRIMITIVES ─── */
+.prims-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));
+  gap:6px;margin-bottom:24px;
+}
+.prim{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:10px 12px;display:flex;gap:9px;align-items:flex-start;
+}
+.prim-dot{
+  width:5px;height:5px;border-radius:50%;flex-shrink:0;
+  margin-top:6px;background:var(--lc,var(--l1));
+}
+.prim-n{font-family:var(--font-m);font-size:11.5px;font-weight:500;color:var(--text);margin-bottom:2px}
+.prim-d{font-size:11.5px;font-weight:300;color:var(--muted);line-height:1.45}
+
+/* ─── PATTERN CARDS ─── */
+.patterns{display:flex;flex-direction:column;gap:5px;margin-bottom:24px}
+
+.pat{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-left:3px solid var(--lc,var(--l1));
+  border-radius:0 var(--r) var(--r) 0;
+  overflow:hidden;
+  transition:border-color 0.18s, box-shadow 0.18s;
+  scroll-margin-top:calc(var(--tb) + 16px);
+}
+.pat:hover{border-color:var(--border2);border-left-color:var(--lc,var(--l1));box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.pat.open{box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+
+.pat-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;cursor:pointer;gap:12px;
+}
+.pat-left{display:flex;align-items:center;gap:12px}
+.pat-idx{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  color:var(--lc,var(--l1));letter-spacing:0.08em;
+  opacity:0.7;flex-shrink:0;width:20px;
+}
+.pat-title{font-size:13.5px;font-weight:500;color:var(--text)}
+.pat-desc{font-size:12px;font-weight:300;color:var(--muted);margin-top:1px}
+.pat-tog{
+  font-family:var(--font-m);font-size:14px;
+  color:var(--muted2);flex-shrink:0;
+  transition:transform 0.22s,color 0.15s;
+  line-height:1;width:16px;text-align:center;
+}
+.pat.open .pat-tog{transform:rotate(45deg);color:var(--amber)}
+
+.pat-body{max-height:0;overflow:hidden;transition:max-height 0.45s cubic-bezier(0.16,1,0.3,1)}
+.pat.open .pat-body{max-height:6000px}
+.pat-content{
+  padding:16px 16px 20px;
+  border-top:1px solid var(--border);
+}
+.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pat-grid.single{grid-template-columns:1fr}
+.pat-text{font-size:13px;font-weight:300;color:var(--muted);line-height:1.72}
+.pat-text p+p,.pat-text+.pat-text{margin-top:9px}
+.pat-text strong{font-weight:500;color:var(--text)}
+.pat-text em{font-style:italic;color:var(--muted)}
+.pat-text code{
+  font-family:var(--font-m);font-size:11px;
+  color:var(--l2);background:rgba(24,107,173,0.08);
+  padding:1px 5px;border-radius:3px;
+}
+
+/* ─── INSIGHT ─── */
+.insight{
+  border-left:2px solid var(--amber);
+  background:var(--amber-bg);
+  border-radius:0 var(--r) var(--r) 0;
+  padding:11px 14px;margin:12px 0;
+  font-size:13px;font-weight:300;color:var(--text);line-height:1.7;
+}
+.insight strong{font-weight:500;color:var(--amber)}
+.insight code{
+  font-family:var(--font-m);font-size:11px;
+  color:var(--amber);background:rgba(168,112,26,0.1);
+  padding:1px 5px;border-radius:3px;
+}
+
+/* ─── CODE BLOCKS ─── */
+.code-wrap{
+  border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border);margin:10px 0;
+}
+.code-hdr{
+  background:#1A1A19;border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:7px 13px;display:flex;align-items:center;gap:10px;
+}
+.code-dots{display:flex;gap:5px}
+.code-dot{width:9px;height:9px;border-radius:50%}
+.code-dot:nth-child(1){background:#ff5f57}
+.code-dot:nth-child(2){background:#febc2e}
+.code-dot:nth-child(3){background:#28c840}
+.code-fn{font-family:var(--font-m);font-size:10.5px;color:#666;margin-left:auto}
+.code-wrap pre{margin:0!important;border-radius:0!important;background:#1A1A19!important;padding:15px!important;font-size:11.5px!important;line-height:1.58!important;overflow-x:auto}
+.code-wrap code{font-family:var(--font-m)!important}
+
+/* ─── ANTI-PATTERNS ─── */
+.anti-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(192px,1fr));
+  gap:6px;margin-bottom:24px;
+}
+.anti{
+  background:#FFF5F5;border:1px solid rgba(220,80,80,0.14);
+  border-left:2px solid rgba(200,60,60,0.4);
+  border-radius:0 var(--r) var(--r) 0;padding:10px 12px;
+}
+.anti-n{font-family:var(--font-m);font-size:11px;font-weight:600;color:#B03030;margin-bottom:3px}
+.anti-d{font-size:12px;font-weight:300;color:var(--muted);line-height:1.45}
+
+/* ─── THE LINE ─── */
+.the-line{
+  border-top:2px solid var(--l4br);
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(to right,var(--l4bg) 0%,transparent 60%);
+  padding:28px 32px;margin:48px 0;
+  border-radius:0 var(--r2) var(--r2) 0;
+}
+.line-tag{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--l4);margin-bottom:8px;
+}
+.line-h{
+  font-family:var(--font-d);font-size:24px;font-weight:400;
+  color:var(--text);margin-bottom:10px;line-height:1.15;
+}
+.line-h em{font-style:italic;color:var(--amber)}
+.line-p{font-size:13px;font-weight:300;color:var(--muted);max-width:520px;line-height:1.7}
+
+/* ─── ELITE SECTION ─── */
+.elite-head{margin-bottom:24px}
+.elite-tag{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--elite);margin-bottom:8px;
+}
+.elite-title{
+  font-family:var(--font-d);font-size:26px;font-weight:400;
+  color:var(--text);margin-bottom:8px;line-height:1.1;
+}
+.elite-title em{font-style:italic;color:var(--amber)}
+.elite-sub{font-size:13px;font-weight:300;color:var(--muted);max-width:500px;line-height:1.7}
+
+.elite-cards{display:flex;flex-direction:column;gap:5px}
+.ec{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-left:3px solid var(--elitebr);
+  border-radius:0 var(--r) var(--r) 0;
+  overflow:hidden;
+  transition:border-color 0.18s,box-shadow 0.18s;
+  scroll-margin-top:calc(var(--tb)+16px);
+}
+.ec:hover{border-color:var(--border2);box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.ec.open{box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.ec-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;cursor:pointer;gap:12px;
+}
+.ec-left{display:flex;align-items:center;gap:12px}
+.ec-num{
+  font-family:var(--font-m);font-size:9px;font-weight:700;
+  color:var(--elite);letter-spacing:0.08em;opacity:0.7;flex-shrink:0;width:20px;
+}
+.ec-title{font-size:13.5px;font-weight:500;color:var(--text)}
+.ec-desc{font-size:12px;font-weight:300;color:var(--muted);margin-top:1px}
+.ec-tog{
+  font-family:var(--font-m);font-size:14px;
+  color:var(--muted2);flex-shrink:0;
+  transition:transform 0.22s,color 0.15s;
+  line-height:1;width:16px;text-align:center;
+}
+.ec.open .ec-tog{transform:rotate(45deg);color:var(--amber)}
+.ec-body{max-height:0;overflow:hidden;transition:max-height 0.45s cubic-bezier(0.16,1,0.3,1)}
+.ec.open .ec-body{max-height:4000px}
+.ec-content{padding:16px 16px 20px;border-top:1px solid var(--border)}
+.ec-text{font-size:13px;font-weight:300;color:var(--muted);line-height:1.72;margin-bottom:10px}
+.ec-text strong{font-weight:500;color:var(--text)}
+.ec-text code{
+  font-family:var(--font-m);font-size:11px;
+  color:var(--amber);background:var(--amber-bg);
+  padding:1px 5px;border-radius:3px;
+}
+
+/* ─── FOOTER ─── */
+.footer{
+  border-top:1px solid var(--border);padding:28px 0;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+}
+.ft-brand{font-family:var(--font-m);font-size:11px;color:var(--muted)}
+.ft-meta{font-family:var(--font-m);font-size:10px;color:var(--muted2)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1000px){
+  :root{--sb-w:0px}
+  .sidebar{display:none}
+  .topbar{padding:0 20px}
+  .main{margin-left:0;padding:32px 24px 60px;max-width:100%}
+  .pat-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .prims-grid,.anti-grid{grid-template-columns:1fr}
+  .lv-own{display:none}
+  .ov-ladder{flex-direction:column}
+}
+/* ─── SKILLS & FRAMEWORKS SECTION ─── */
+.sf-section{margin-bottom:40px}
+.sf-head{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:12px;
+  border-bottom:2px solid var(--sf-br,var(--elitebr));
+  margin-bottom:16px;
+}
+.sf-badge{
+  font-family:var(--font-m);font-size:10px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--sf-c,var(--elite));
+  padding:2px 8px;border-radius:20px;
+  border:1px solid var(--sf-br,var(--elitebr));
+  background:var(--sf-bg,var(--elitebg));
+}
+.sf-name{font-family:var(--font-d);font-size:20px;font-weight:400;color:var(--text);line-height:1}
+.sf-desc{font-size:13px;font-weight:300;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.skill-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;margin-bottom:16px}
+.sk{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-left:3px solid var(--sf-br,var(--elitebr));
+  border-radius:0 var(--r) var(--r) 0;
+  overflow:hidden;
+  transition:border-color .18s,box-shadow .18s;
+  scroll-margin-top:calc(var(--tb)+16px);
+}
+.sk:hover{border-color:var(--border2);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sk.open{box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.sk-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;cursor:pointer;gap:12px}
+.sk-left{display:flex;align-items:center;gap:12px}
+.sk-num{font-family:var(--font-m);font-size:9px;font-weight:700;color:var(--sf-c,var(--elite));letter-spacing:.08em;opacity:.7;flex-shrink:0;width:24px}
+.sk-title{font-size:13.5px;font-weight:500;color:var(--text)}
+.sk-desc{font-size:12px;font-weight:300;color:var(--muted);margin-top:1px}
+.sk-tog{font-family:var(--font-m);font-size:14px;color:var(--muted2);flex-shrink:0;transition:transform .22s,color .15s;line-height:1;width:16px;text-align:center}
+.sk.open .sk-tog{transform:rotate(45deg);color:var(--amber)}
+.sk-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.16,1,.3,1)}
+.sk.open .sk-body{max-height:4000px}
+.sk-content{padding:16px 16px 20px;border-top:1px solid var(--border)}
+.sk-text{font-size:13px;font-weight:300;color:var(--muted);line-height:1.72;margin-bottom:10px}
+.sk-text strong{font-weight:500;color:var(--text)}
+.sk-text code{font-family:var(--font-m);font-size:11px;color:var(--sf-c,var(--elite));background:var(--sf-bg,var(--elitebg));padding:1px 5px;border-radius:3px}
+.sk-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-family:var(--font-m);font-size:10px;font-weight:600;border:1px solid;margin:0 3px 3px 0}
+.sk-tag.official{color:#1867A6;border-color:rgba(24,103,166,.3);background:rgba(24,103,166,.07)}
+.sk-tag.community{color:#5750BE;border-color:rgba(87,80,190,.3);background:rgba(87,80,190,.07)}
+.sk-tag.dotnet{color:#512BD4;border-color:rgba(81,43,212,.3);background:rgba(81,43,212,.08)}
+.sk-tag.stars{color:var(--amber);border-color:var(--amber-border);background:var(--amber-bg)}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="tb-brand">CC MASTERY</span>
+  <span class="tb-hint">1–4 levels · E elite · S skills</span>
+  <span class="tb-meta">Claude Code · May 2026 · v2.1.x</span>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<nav class="sidenav">
+  <div class="sn-brand">CC MASTERY</div>
+
+  <div class="sn-group">
+    <a href="#overview" class="sn-lv" style="--lc:var(--amber)">
+      <span class="sn-lv-dot"></span>Overview
+    </a>
+  </div>
+
+  <div class="sn-div"></div>
+
+  <div class="sn-group" id="sg-l1">
+    <a href="#l1" class="sn-lv" style="--lc:var(--l1)">
+      <span class="sn-lv-dot"></span><span>01 · Configure</span>
+    </a>
+    <div class="sn-pats">
+      <a href="#l1-p1" class="sn-p">Living CLAUDE.md</a>
+      <a href="#l1-p2" class="sn-p">Essential Hooks</a>
+      <a href="#l1-p3" class="sn-p">MEMORY.md Protocol</a>
+      <a href="#l1-p4" class="sn-p">PreCompact Backup</a>
+      <a href="#l1-p5" class="sn-p">Anti-patterns</a>
+    </div>
+  </div>
+
+  <div class="sn-group" id="sg-l2">
+    <a href="#l2" class="sn-lv" style="--lc:var(--l2)">
+      <span class="sn-lv-dot"></span><span>02 · Program</span>
+    </a>
+    <div class="sn-pats">
+      <a href="#l2-p1" class="sn-p">Explorer Subagent</a>
+      <a href="#l2-p2" class="sn-p">Writer/Reviewer</a>
+      <a href="#l2-p3" class="sn-p">Vertical Slices</a>
+      <a href="#l2-p4" class="sn-p">Skill Frontmatter</a>
+      <a href="#l2-p5" class="sn-p">Git Worktrees</a>
+    </div>
+  </div>
+
+  <div class="sn-group" id="sg-l3">
+    <a href="#l3" class="sn-lv" style="--lc:var(--l3)">
+      <span class="sn-lv-dot"></span><span>03 · Orchestrate</span>
+    </a>
+    <div class="sn-pats">
+      <a href="#l3-p1" class="sn-p">Grading Loop</a>
+      <a href="#l3-p2" class="sn-p">Input Modification</a>
+      <a href="#l3-p3" class="sn-p">Headless CI</a>
+      <a href="#l3-p4" class="sn-p">Injection Defense</a>
+      <a href="#l3-p5" class="sn-p">Verification</a>
+    </div>
+  </div>
+
+  <div class="sn-div"></div>
+  <div class="sn-theline">▸ The Line</div>
+  <div class="sn-div"></div>
+
+  <div class="sn-group" id="sg-l4">
+    <a href="#l4" class="sn-lv" style="--lc:var(--l4)">
+      <span class="sn-lv-dot"></span><span>04 · Build</span>
+    </a>
+    <div class="sn-pats">
+      <a href="#l4-p1" class="sn-p">Agent SDK</a>
+      <a href="#l4-p2" class="sn-p">MCP Server Design</a>
+      <a href="#l4-p3" class="sn-p">Prompt Caching</a>
+      <a href="#l4-p4" class="sn-p">Durable Execution</a>
+      <a href="#l4-p5" class="sn-p">Governance</a>
+    </div>
+  </div>
+
+  <div class="sn-div"></div>
+
+  <div class="sn-group" id="sg-elite">
+    <a href="#elite" class="sn-elite">⚡ Elite Patterns</a>
+    <div class="sn-pats">
+      <a href="#e1" class="sn-p">E1 Agent Hooks</a>
+      <a href="#e2" class="sn-p">E2 MCP Tool Hooks</a>
+      <a href="#e3" class="sn-p">E3 SubagentStop</a>
+      <a href="#e4" class="sn-p">E4 Async Hooks</a>
+      <a href="#e5" class="sn-p">E5 HTTP Hooks</a>
+      <a href="#e6" class="sn-p">E6 Superpowers</a>
+      <a href="#e7" class="sn-p">E7 Compound Eng.</a>
+    </div>
+  </div>
+
+  <div class="sn-div"></div>
+
+  <div class="sn-group" id="sg-skills">
+    <a href="#skills" class="sn-elite">◈ Skills &amp; Frameworks</a>
+    <div class="sn-pats">
+      <a href="#skills-community" class="sn-p">Community arsenal</a>
+      <a href="#skills-csharp" class="sn-p">C# / .NET</a>
+      <a href="#skills-blazor" class="sn-p">Blazor</a>
+    </div>
+  </div>
+
+</nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- OVERVIEW -->
+<div id="overview" class="overview">
+  <div class="ov-tag">Claude Code · Deep Reference · May 2026</div>
+  <div class="ov-title">Four levels to <em>agent engineering.</em></div>
+  <p class="ov-body">Every pattern that separates teams who ship production-quality AI from teams who keep hitting the 80% wall. Sourced from Anthropic's team, Boris Cherny's public workflow, the obra/superpowers community (177k stars), and official docs verified against CC v2.1.x.</p>
+  <div class="ov-ladder">
+    <div class="ov-seg seg-l1"><span class="seg-dot"></span>01 Configure <span class="seg-own">· you own the config</span></div>
+    <div class="ov-seg seg-l2"><span class="seg-dot"></span>02 Program <span class="seg-own">· you own the workflow</span></div>
+    <div class="ov-seg seg-l3"><span class="seg-dot"></span>03 Orchestrate <span class="seg-own">· you own the pipeline</span></div>
+    <div class="ov-seg seg-l4"><span class="seg-dot"></span>04 Build <span class="seg-own">· you own the runtime</span></div>
+  </div>
+</div>
+
+<!-- ══════════ LEVEL 1 ══════════ -->
+<section id="l1" class="level" style="--lc:var(--l1);--lc-bg:var(--l1bg);--lc-br:var(--l1br)">
+  <div class="lv-head">
+    <span class="lv-num">01</span>
+    <span class="lv-badge-text">Configure</span>
+    <span class="lv-name-text">The foundation layer</span>
+    <span class="lv-own">You own the config</span>
+  </div>
+  <p class="lv-tag-text">CLAUDE.md, hooks, permissions, MEMORY.md. The infrastructure every team should commit before writing a single prompt — and keep updating forever as Claude makes new mistakes.</p>
+
+  <div class="the-test">
+    <div class="test-lbl">The Level 1 Test</div>
+    <div class="test-q">"Do you have a CLAUDE.md in every active repo, reviewed as carefully as code, and hooks that enforce what CLAUDE.md can only suggest?"</div>
+  </div>
+
+  <div class="sec-lbl">Primitives</div>
+  <div class="prims-grid">
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">CLAUDE.md</div><div class="prim-d">Advisory. ~70-80% reliable. Behavioral guidance, not enforcement. Run /init to generate from your codebase.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Hooks</div><div class="prim-d">Deterministic. 100%. 25+ lifecycle events: PreToolUse, PostToolUse, Stop, SubagentStop, PreCompact, SessionStart.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Permissions</div><div class="prim-d">Deny-first evaluation. Denied files are invisible to Claude — not just blocked. allow / ask / deny.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">MEMORY.md</div><div class="prim-d">Session state handoff. Claude reads at session start, writes at end. Survives across conversations.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Slash commands</div><div class="prim-d">.claude/commands/*.md — reusable prompt procedures. Team-shared, version-controlled like code.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">@imports</div><div class="prim-d">@docs/testing.md in CLAUDE.md loads domain docs conditionally without bloating every session.</div></div></div>
+  </div>
+
+  <div class="sec-lbl">Patterns</div>
+  <div class="patterns">
+
+    <div id="l1-p1" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P1</div><div><div class="pat-title">The living CLAUDE.md — correction loop</div><div class="pat-desc">Encode every wrong assumption immediately. The file compounds over time like interest.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Boris Cherny's team rule: <strong>when Claude does something wrong, add it to CLAUDE.md so it doesn't repeat.</strong> Don't just fix the output and move on — fix the system. The six-month CLAUDE.md built this way is worth more than any prompt.</p>
+          <p class="pat-text" style="margin-top:9px">Root file stays under 100 lines of invariants. Use @imports for domain context that would bloat every session. Every line earns its place — ask "would removing this cause Claude to make a mistake?"</p>
+          <div class="insight">Use the <strong>WHAT/WHY/HOW framework</strong> for each rule:<br>• WHAT: "Never use --foo-bar flag"<br>• WHY: "Creates write locks in DB layer"<br>• HOW: "Use --baz instead (docs/db.md)"<br><br>Negative-only rules without alternatives get Claude stuck. Always provide the redirect.</div>
+          <p class="pat-text">Diagnostic prompt for persistent mistakes: <em>"Stop. Before fixing the code — explain what rule you're supposed to follow here, why you keep getting it wrong, and propose exactly what to add to CLAUDE.md to prevent this permanently."</em></p>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">CLAUDE.md template (~100 lines)</span></div>
+<pre><code class="language-markdown"># [Service Name]
+
+## Identity (one line)
+REST API. Node 20, TypeScript strict,
+PostgreSQL/Drizzle. Deployed AWS ECS.
+
+## Commands — use these exactly
+- Test: `pnpm test`
+- Test single: `pnpm test [path]`
+- Lint/fix: `pnpm lint:fix`
+- Build: `pnpm build`
+- Migrate (dry-run): `pnpm db:migrate`
+
+## Architecture rules
+- Domain logic ONLY in src/domain/
+- HTTP layer ONLY in src/api/
+- DB access via repos in src/repos/ only
+- Secrets from env — NEVER hardcode
+
+## Code style
+- Named exports only (no default exports)
+- Throw typed errors from src/errors/
+- async/await — no raw Promise chains
+
+## Known wrong defaults
+- ALWAYS pnpm, NEVER npm or yarn
+- Import @company/core not @company/utils
+  (deprecated since v3.2)
+- logger from src/lib/logger.ts, not console
+- NEVER log request bodies, tokens, or PII
+
+## Compaction policy
+When context compacts, preserve:
+- Current task definition
+- Files modified this session
+- Errors encountered + resolutions
+- Architectural decisions made
+
+@docs/api-conventions.md
+@docs/error-handling.md</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l1-p2" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P2</div><div><div class="pat-title">The four essential hooks — full production config</div><div class="pat-desc">Auto-format, destructive block, file protection, test-gated stop. The deterministic enforcement layer.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">The critical distinction: CLAUDE.md is advisory (~70-80% followed). <strong>Hooks are deterministic — they fire every time, cannot hallucinate, cannot be reasoned around.</strong></p>
+          <p class="pat-text" style="margin-top:9px">Exit codes: exit 0 = allow, exit 2 = block (even in bypassPermissions mode), exit 1 = warn and continue. Security hooks must exit 2 or they provide no enforcement.</p>
+          <div class="insight">The <strong>stop_hook_active guard is mandatory</strong> on Stop hooks. Without it: Claude stops → hook exits 2 → Claude works → stops → hook fires again → infinite loop. Always check this field first and exit 0 if the hook already ran this stop.</div>
+          <p class="pat-text">Performance budget: hooks on PreToolUse/PostToolUse fire on every matched tool call. Keep each hook under 200ms or the session degrades. Profile with <code>time</code> before deploying.</p>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/settings.json</span></div>
+<pre><code class="language-json">{
+  "permissions": {
+    "allow": ["Bash(pnpm test:*)","Bash(pnpm lint:*)",
+      "Bash(git status)","Bash(git diff:*)",
+      "Bash(git add:*)","Bash(git commit:*)",
+      "Read","Glob","Grep"],
+    "ask": ["Bash(git push:*)","Bash(pnpm db:migrate:*)"],
+    "deny": ["Read(./.env)","Read(./.env.*)",
+      "Read(./secrets/**)","Bash(curl:*)"]
+  },
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Write|Edit|MultiEdit",
+      "hooks": [{"type":"command",
+        "command":"npx prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\" 2>/dev/null || true"
+      }]
+    }],
+    "PreToolUse": [
+      {"matcher":"Bash","hooks":[{"type":"command",
+        "command":"\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-bash.sh"
+      }]},
+      {"matcher":"Write|Edit","hooks":[{"type":"command",
+        "command":"\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-files.sh"
+      }]}
+    ],
+    "Stop": [{"hooks":[{"type":"command",
+      "command":"INPUT=$(cat); [ \"$(echo $INPUT|jq -r '.stop_hook_active')\" = 'true' ] && exit 0; pnpm test --silent 2>&1 | tail -5 || exit 2"
+    }]}],
+    "SessionStart": [{"hooks":[{"type":"command",
+      "command":"echo \"{\\\"additionalContext\\\":\\\"Branch: $(git branch --show-current). See .claude/sprint-context.md\\\"}\""
+    }]}]
+  }
+}</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l1-p3" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P3</div><div><div class="pat-title">MEMORY.md session handoff protocol</div><div class="pat-desc">Session state that survives across conversations. Claude reads it cold and knows exactly where you left off.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">CLAUDE.md carries static project knowledge. MEMORY.md carries <strong>session-specific state</strong> — what you decided last session, what's in-progress, what's blocked. Over months it becomes a decision log more valuable than git history.</p>
+          <div class="insight">The most valuable MEMORY.md entries are the <strong>"we tried X but it caused Y"</strong> decisions. These are exactly the assumptions Claude re-makes every fresh session without this file. Negative decisions compound too.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/commands/session-end.md</span></div>
+<pre><code class="language-markdown">Before ending this session, update .claude/MEMORY.md:
+
+## Last updated: [date/time]
+
+## Completed this session
+[Specific tasks with file paths]
+
+## In-progress state
+[What's partially done; files in transition]
+
+## Decisions made
+[Architectural choices, rejected approaches, and
+WHY they were rejected — the critical part]
+
+## Blockers
+[What's blocked and on what]
+
+## Next session start prompt
+[Exact prompt to resume efficiently]
+
+Update the existing file. 3-5 bullets max per section.</code></pre></div>
+          <div class="code-wrap" style="margin-top:6px"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/commands/session-start.md</span></div>
+<pre><code class="language-markdown">Before anything else:
+1. Read .claude/MEMORY.md if it exists
+2. Summarize current state in 2 sentences
+3. Ask: "Resume [in-progress work] or new task?"
+
+Then wait for direction before taking any action.</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l1-p4" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P4</div><div><div class="pat-title">PreCompact context preservation + PostCompact re-injection</div><div class="pat-desc">Back up working context before Claude's memory compresses. Re-inject after. Async — never blocks execution.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">When Claude's context fills and auto-compacts, the working memory is compressed. PreCompact fires first — use it to write a backup before compression. PostCompact fires after — use it to re-inject context that compaction might have lost.</p>
+          <p class="pat-text" style="margin-top:9px">Also shape what survives compaction via the CLAUDE.md compaction policy section — Claude uses this to prioritize what to preserve in its compaction summary.</p>
+          <div class="insight"><strong>async: true</strong> (released Jan 2026) runs the hook in the background without blocking execution. Use async for backups, logging, and notifications. Never async for security gates — those must block synchronously.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/settings.json (PreCompact + PostCompact)</span></div>
+<pre><code class="language-json">{
+  "hooks": {
+    "PreCompact": [{
+      "hooks": [{
+        "type": "command",
+        "async": true,
+        "command": "cp ~/.claude/projects/$(basename $PWD)/$CLAUDE_SESSION_ID.jsonl ~/.claude/backups/session-$(date +%s).jsonl 2>/dev/null || true"
+      }]
+    }],
+    "PostCompact": [{
+      "hooks": [{
+        "type": "command",
+        "command": "echo '{\"additionalContext\":\"Context just compacted. Re-read .claude/MEMORY.md if you need task context that may have been lost.\"}'"
+      }]
+    }]
+  }
+}</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l1-p5" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P5</div><div><div class="pat-title">Wrong defaults to encode before session one</div><div class="pat-desc">The assumptions Claude ships with that will bite you. Commit these to CLAUDE.md on day one.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid single">
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">CLAUDE.md — known wrong defaults section</span></div>
+<pre><code class="language-markdown">## Known wrong defaults
+
+### Package manager
+ALWAYS pnpm. NEVER npm or yarn.
+
+### Testing
+Run only affected file: `pnpm test [file]`
+Full suite only when explicitly asked.
+
+### Database
+NEVER run migrations against production.
+`pnpm db:migrate` is dry-run by default (hook enforced).
+Actual execution: `pnpm db:migrate --execute`
+
+### Git
+NEVER git push --force. Use --force-with-lease.
+Commits: feat|fix|docs|refactor|test|chore(scope): desc
+
+### File creation
+NEVER create a service without checking src/services/ first.
+Check for existing patterns before anything new.
+
+### Error handling
+NEVER throw plain Error(). Use src/errors/index.ts:
+ValidationError, NotFoundError, AuthError, ExternalServiceError.
+
+### Logging
+NEVER console.log. ALWAYS logger from src/lib/logger.ts.
+NEVER log bodies, tokens, or anything with user PII.</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+  </div><!-- /patterns -->
+
+  <div class="sec-lbl">Anti-patterns at this level</div>
+  <div class="anti-grid">
+    <div class="anti"><div class="anti-n">The kitchen sink session</div><div class="anti-d">One task, then another, then another. Context fills with noise. Use /clear between unrelated tasks.</div></div>
+    <div class="anti"><div class="anti-n">Correcting over and over</div><div class="anti-d">Fixing output without encoding the fix in CLAUDE.md. Same mistake recurs next session. Encode once.</div></div>
+    <div class="anti"><div class="anti-n">CLAUDE.md over 200 lines</div><div class="anti-d">Claude attends ~150 instructions reliably. Past 200 lines, rules get lost in noise. Every line must earn its place.</div></div>
+    <div class="anti"><div class="anti-n">Rules without alternatives</div><div class="anti-d">"Never use --foo-bar" gets Claude stuck. "Never use --foo-bar; prefer --baz (docs)" gives it a path.</div></div>
+  </div>
+</section>
+
+<!-- ══════════ LEVEL 2 ══════════ -->
+<section id="l2" class="level" style="--lc:var(--l2);--lc-bg:var(--l2bg);--lc-br:var(--l2br)">
+  <div class="lv-head">
+    <span class="lv-num">02</span>
+    <span class="lv-badge-text">Program</span>
+    <span class="lv-name-text">Context architecture</span>
+    <span class="lv-own">You own the workflow</span>
+  </div>
+  <p class="lv-tag-text">Subagents, skills, agent teams, worktrees. The key insight: context isolation is the primary value — not just parallelism. A 40%-full focused agent outperforms a 90%-full general one on every reasoning task.</p>
+
+  <div class="the-test">
+    <div class="test-lbl">The Level 2 Test</div>
+    <div class="test-q">"When exploring an unfamiliar module, do you delegate to a subagent — or let the exploration logs pollute your main session context?"</div>
+  </div>
+
+  <div class="sec-lbl">Primitives</div>
+  <div class="prims-grid">
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Subagents</div><div class="prim-d">Isolated context windows. Only the summary returns — not exploration logs, failed attempts, or intermediate reasoning.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Skills</div><div class="prim-d">.claude/skills/name/SKILL.md — procedures that load on-demand. Body costs zero tokens until invoked.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Agent teams</div><div class="prim-d">Bidirectional — teammates message each other directly. Requires CC v2.1.32+. Enable via settings.json env.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Git worktrees</div><div class="prim-d">Each session in its own branch + directory. Zero context bleed between parallel work. 4-8 concurrent reliably.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">/compact at 70%</div><div class="prim-d">Proactively compact before the model degrades, not reactively when mistakes start appearing.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Forks</div><div class="prim-d">Inherit full conversation history. Use when a subagent would need too much background context to start fresh.</div></div></div>
+  </div>
+
+  <div class="sec-lbl">Patterns</div>
+  <div class="patterns">
+
+    <div id="l2-p1" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P1</div><div><div class="pat-title">Codebase explorer subagent — pure research isolation</div><div class="pat-desc">All exploration in its own context window. Only a clean structured summary returns to your session.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Exploring an unfamiliar module generates noise: grep output, file reads, dead-ends, intermediate reasoning. Done in your main session, that noise fills context and degrades all subsequent work. The subagent takes all of it and returns only the distilled summary.</p>
+          <div class="insight">Use for: unfamiliar modules before touching them, third-party API research, dependency analysis, "how does X work" investigations. <strong>Never use for implementation</strong> — research only. The moment you start writing code in a research subagent, you've broken the isolation model.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/agents/codebase-explorer.md</span></div>
+<pre><code class="language-markdown">---
+name: codebase-explorer
+description: >
+  Use when you need to understand how a module,
+  pattern, or system works before implementing.
+  Explores independently, returns structured
+  summary. Do NOT use for implementation.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+---
+
+You investigate code and return clean summaries.
+You do NOT write production code.
+
+When invoked, receive a research question.
+Explore: read files, trace call chains,
+find tests as behavior documentation.
+
+Return structured summary:
+1. How it works (2-3 paragraphs)
+2. Key files and their roles (with paths)
+3. Patterns to follow when adding to this system
+4. Things NOT to do (common mistakes)
+5. Open questions the code didn't answer</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l2-p2" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P2</div><div><div class="pat-title">Writer/reviewer loop — eliminating author bias</div><div class="pat-desc">One session writes. A fresh session reviews. Fresh context has no anchor to the code it just wrote.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Claude reviewing its own code always approves it. The author bias is structural — the same context that wrote the code will rationalize it during review. A fresh session with no writing history is genuinely adversarial.</p>
+          <div class="insight">For payment and auth code: use a <strong>dedicated code-reviewer agent (model: opus)</strong> as the reviewer. Security misses are expensive enough to justify the cost difference. Add to CLAUDE.md: "Before committing anything in src/payments/ or src/auth/, MUST invoke the code-reviewer agent."</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/agents/code-reviewer.md</span></div>
+<pre><code class="language-markdown">---
+name: code-reviewer
+description: >
+  Adversarial code review. Invoke after any
+  payment, auth, or data mutation implementation.
+  Proactively before any commit in
+  src/payments/ or src/auth/.
+tools: Read, Glob, Grep, Bash
+model: opus
+---
+
+You find problems. Not validate that work looks good.
+
+When invoked:
+1. Run `git diff HEAD` — see what changed
+2. Read every changed file completely
+3. For each file, check:
+   - Security: input validation, auth bypass, PII
+   - Correctness: edge cases, concurrent access
+   - Performance: N+1 queries, unbounded loops
+   - Tests: do they actually test the behavior?
+
+Output format — be specific or say nothing:
+CRITICAL (block merge): [issue] at [file]:[line]
+IMPORTANT (fix before ship): [issue] at [file]:[line]
+
+If nothing critical: say so with your reasoning.</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l2-p3" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P3</div><div><div class="pat-title">Vertical slices, not horizontal phases</div><div class="pat-desc">Force tracer bullets through the full stack. Catch integration problems on task one, not the last task.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Claude defaults to horizontal phases: all DB first, then all API, then all UI. You don't see working code until the final phase — and integration problems appear too late to fix cheaply.</p>
+          <p class="pat-text" style="margin-top:9px">Vertical slices cut through all layers for one complete user-visible feature. Each slice is independently runnable. Integration problems surface on slice one when they're still cheap.</p>
+          <div class="insight"><strong>Always include a review checkpoint between slices.</strong> "After Slice 1 passes all tests, stop and let me review before Slice 2." This creates a natural human-in-the-loop gate without interrupting flow within a slice.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Vertical slice prompt pattern</span></div>
+<pre><code class="language-markdown">Implement [feature] as vertical slices.
+
+Slice 1: "User can see unread notification count"
+- DB: notifications table (id, user_id, type,
+  read_at, created_at)
+- Service: getUnreadCount(userId)
+- API: GET /api/notifications/count
+- Frontend: NotificationBadge using the endpoint
+- Test: integration test for the full slice
+
+Stop after Slice 1 passes all tests.
+Wait for my review before proceeding.
+
+Slice 2: "User can mark a notification as read"
+[continue...]
+
+Each slice must be independently demoed.
+Do not proceed past a checkpoint without approval.</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l2-p4" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P4</div><div><div class="pat-title">Skill frontmatter — once, fork, hooks, auto-trigger</div><div class="pat-desc">Four advanced fields most developers never use. Run once per session. Isolate in fork. Attach scoped hooks.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text"><strong>once: true</strong> — the skill body executes only once per session. Ideal for expensive setup: loading architecture docs, reading schema files. Subsequent invocations are no-ops.</p>
+          <p class="pat-text" style="margin-top:9px"><strong>context: fork</strong> — runs in a forked subagent context. Skill's verbose processing stays isolated; your main context only sees the result.</p>
+          <p class="pat-text" style="margin-top:9px"><strong>hooks in frontmatter</strong> — scoped to the skill's lifecycle only. A PreToolUse hook inside a skill fires only for that skill's tool calls, not the entire session.</p>
+          <div class="insight"><strong>Description precision is everything for auto-trigger.</strong> "Use when the user asks to review code, after writing new code, or mentions wanting a PR review" triggers reliably. "Code review stuff" never triggers. The description is how Claude decides whether to invoke the skill.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/skills/load-architecture/SKILL.md</span></div>
+<pre><code class="language-markdown">---
+name: load-architecture
+description: >
+  Load and internalize project architecture docs.
+  Use at the start of every session and whenever
+  architecture context is needed.
+once: true
+---
+
+Read and internalize these files completely:
+- docs/architecture.md
+- docs/domain-model.md
+- docs/adr/ (all architectural decision records)
+
+After reading, summarize in 3 bullets:
+what this system does, key architectural
+constraints, and primary data flows.
+Then confirm you're ready to work.</code></pre></div>
+          <div class="code-wrap" style="margin-top:6px"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Skill with scoped hooks</span></div>
+<pre><code class="language-markdown">---
+name: secure-ops
+description: >
+  Use when running database or deployment commands.
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "./scripts/security-check.sh"
+---
+You are in secure operations mode.
+Every bash command runs security-check.sh first.</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l2-p5" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P5</div><div><div class="pat-title">Git worktrees with role discipline</div><div class="pat-desc">Each task in its own branch and directory. The failure mode is role blur — sessions drifting into each other's files.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Two Claude sessions on the same branch means the moment one edits a file, the other's context is stale. Worktrees give each session its own filesystem, branch, CLAUDE.md view, and conversation history.</p>
+          <div class="insight"><strong>Role discipline is the failure mode.</strong> The moment Session A starts touching files that belong to Session B, stop, commit what's safe, and reset. Parallel sessions fail when they blur — not when they start. Assign explicit file boundaries per session.</div>
+          <p class="pat-text" style="margin-top:9px">Advanced: use /plan in the main session to decompose a feature, then spawn one worktree per task. Each worktree runs independently, you review diffs as they complete, merge sequentially. Closest thing to "multiple engineers on one feature" AI tooling has produced.</p>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Parallel worktree setup + agent teams</span></div>
+<pre><code class="language-bash"># Create isolated worktrees
+git worktree add ../myrepo-feat-auth feat/oauth
+git worktree add ../myrepo-fix-deploy fix/timeout
+git worktree add ../myrepo-docs docs/api-update
+
+# Open Claude in each (separate terminals)
+cd ../myrepo-feat-auth && claude
+# → "Focus ONLY on src/auth/ — no other dirs"
+
+cd ../myrepo-fix-deploy && claude
+# → "Focus ONLY on src/deploy/healthCheck.ts"
+
+# Cleanup after merge
+git worktree remove ../myrepo-feat-auth
+
+# Enable Agent Teams (CC v2.1.32+):
+# .claude/settings.json:
+# {"env":{"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS":"1"}}
+# Then: "Create a team with frontend, backend,
+# and test specialists. Teammates coordinate
+# directly — not just through the lead."</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+  </div><!-- /patterns -->
+</section>
+
+<!-- ══════════ LEVEL 3 ══════════ -->
+<section id="l3" class="level" style="--lc:var(--l3);--lc-bg:var(--l3bg);--lc-br:var(--l3br)">
+  <div class="lv-head">
+    <span class="lv-num">03</span>
+    <span class="lv-badge-text">Orchestrate</span>
+    <span class="lv-name-text">Pipeline engineering</span>
+    <span class="lv-own">You own the pipeline</span>
+  </div>
+  <p class="lv-tag-text">Headless mode, GitHub Actions, input rewriting, grading loops. Your application now runs agents — no human watching, deterministic output, verifiable quality, budget caps in place.</p>
+
+  <div class="the-test">
+    <div class="test-lbl">The Level 3 Test</div>
+    <div class="test-q">"Does your CI pipeline run Claude automatically on every PR with token budget caps, structured JSON output, and dedup to avoid comment spam across runs?"</div>
+  </div>
+
+  <div class="sec-lbl">Primitives</div>
+  <div class="prims-grid">
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">claude -p --bare</div><div class="prim-d">Non-interactive. --bare = no runner state bleed. Without it, CI behavior depends on invisible ~/.claude/ state per runner.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">stream-json output</div><div class="prim-d">Every tool call, decision, error as a structured JSON line. Essential for CI observability and debugging.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Input modification</div><div class="prim-d">PreToolUse hooks silently rewrite tool inputs before execution. Claude uses the safe version, never knows.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Grading loops</div><div class="prim-d">Draft → grade (fresh context, no author bias) → retry. 10.1% quality lift with no model change.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">--allowedTools</div><div class="prim-d">The only hard enforcement boundary. CLAUDE.md constraints are advisory; this whitelist is a technical limit.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">--max-turns + USD cap</div><div class="prim-d">Hard loop caps and dollar ceilings. Without these, CI runs are unbounded. You will have a billing event.</div></div></div>
+  </div>
+
+  <div class="sec-lbl">Patterns</div>
+  <div class="patterns">
+
+    <div id="l3-p1" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P1</div><div><div class="pat-title">The grading loop — quality without model change</div><div class="pat-desc">Draft in session 1. Grade against a rubric in fresh context. The grader has no author bias. Retry only on failure.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Anthropic's Outcomes feature (Managed Agents, public beta) implements this pattern natively. You can implement it manually today. The key: a grader in a fresh context window is not influenced by the reasoning that produced the draft.</p>
+          <div class="insight"><strong>A well-written rubric is worth more than three additional subagents.</strong> The rubric forces you to articulate what "good" looks like — which is actually the hard problem. Anthropic's internal benchmarks show 10.1% improvement on pptx, 8.4% on docx, purely from adding the grading layer with no model change.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/commands/graded-review.md</span></div>
+<pre><code class="language-markdown">You will do a graded PR review.
+Rubric is at: .claude/rubrics/pr-review.md
+
+Pass 1 — Draft:
+Review the current diff. Write your review
+to .claude/review-draft.md.
+
+Pass 2 — Grade (fresh read):
+Read .claude/rubrics/pr-review.md carefully.
+Read .claude/review-draft.md as if you
+didn't write it. Score adversarially.
+Write grade JSON to .claude/review-grade.json:
+{
+  "specificity": 1-5,
+  "actionability": 1-5,
+  "false_positive_rate": 1-5,
+  "coverage": 1-5,
+  "pass": boolean,
+  "weakest_dimension": "...",
+  "retry_instruction": "Focus on [gap]"
+}
+
+Pass 3 — Retry if failed:
+If pass=false: rewrite targeting weakest_dimension.
+Re-grade. Maximum 3 attempts total.
+If still failing: output best version and flag:
+REVIEW_NEEDS_HUMAN_ESCALATION</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l3-p2" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P2</div><div><div class="pat-title">Input modification — transparent sandboxing</div><div class="pat-desc">Hooks that silently rewrite Claude's tool inputs before execution. Claude never knows the redirect happened.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Since CC v2.0.10, PreToolUse hooks can return modified JSON that Claude uses instead of its original input. Three production patterns: branch safety on push, dry-run on migrations, and stripping --no-verify from commits.</p>
+          <div class="insight">This is not configuration or enforcement — it's <strong>structural safety that can't be reasoned around because Claude doesn't know it's happening.</strong> The most powerful hooks are the ones that work invisibly.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/hooks/safe-push.sh</span></div>
+<pre><code class="language-bash">#!/bin/bash
+# Silent input modification — Claude never sees this
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# Redirect push to main → current branch
+if echo "$COMMAND" | grep -qE 'git push.*(origin main|origin master)'; then
+  BRANCH=$(git branch --show-current)
+  SAFE=$(echo "$COMMAND" | sed "s/origin main/origin $BRANCH/g")
+  echo "$INPUT" | jq --arg c "$SAFE" '.tool_input.command = $c'
+  exit 0
+fi
+
+# Inject --dry-run on migrations unless --execute present
+if echo "$COMMAND" | grep -q 'pnpm db:migrate' && \
+   ! echo "$COMMAND" | grep -q '\-\-execute'; then
+  echo "$INPUT" | jq --arg c "$COMMAND --dry-run" '.tool_input.command = $c'
+  exit 0
+fi
+
+# Strip --no-verify (force hooks to always run)
+if echo "$COMMAND" | grep -q 'git commit.*--no-verify'; then
+  SAFE=$(echo "$COMMAND" | sed 's/--no-verify//g')
+  echo "$INPUT" | jq --arg c "$SAFE" '.tool_input.command = $c'
+  exit 0
+fi
+
+echo "$INPUT"; exit 0</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l3-p3" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P3</div><div><div class="pat-title">Headless CI — four required flags + dedup</div><div class="pat-desc">--bare makes runs deterministic. stream-json makes them observable. Dedup prevents comment spam across PR runs.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Four flags that make CI production-grade: <strong>--bare</strong> (no runner state bleed), <strong>--output-format stream-json</strong> (every call loggable), <strong>--max-turns N</strong> (hard loop cap), <strong>--allowedTools "..."</strong> (technical whitelist).</p>
+          <p class="pat-text" style="margin-top:9px">Cost reality: Sonnet ~$0.02-0.05 per medium PR. 10 PRs/day team: ~$30-50/month total. Reserve Opus for scheduled weekly deep audits — not every-push reviews.</p>
+          <div class="insight">Dedup is essential at team scale. Without it, Claude comments the same security issue on every re-push. Fetch prior Claude comments, pass them in context, and explicitly tell Claude to only report new or still-unresolved issues.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.github/workflows/claude-review.yml</span></div>
+<pre><code class="language-yaml">name: Claude Review
+on:
+  pull_request:
+    paths: ['src/auth/**','src/payments/**']
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions: {contents: read, pull-requests: write}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Dedup-aware Claude review
+        env:
+          ANTHROPIC_API_KEY: ${{secrets.ANTHROPIC_API_KEY}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          PRIOR=$(gh pr view ${{github.event.pull_request.number}} \
+            --json comments \
+            --jq '.comments[]|select(.author.login=="github-actions[bot]")|.body' \
+            2>/dev/null || echo "")
+
+          claude -p "Review PR for security issues.
+            PRIOR REPORTED (do not repeat): $PRIOR
+            Output JSON: {issues:[{file,line,severity,
+            desc,fix}],pass:bool,recommendation:string}" \
+            --bare \
+            --output-format json \
+            --max-turns 8 \
+            --allowedTools "Read,Grep,Glob,Bash(git diff:*)" \
+            > review.json
+
+          gh pr comment ${{github.event.pull_request.number}} \
+            --body "$(jq -r '.result' review.json)"</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l3-p4" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P4</div><div><div class="pat-title">Prompt injection defense in agentic pipelines</div><div class="pat-desc">External content can hijack agents. Sanitize before it enters context. Scope reads to what's necessary.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">When Claude Code reads PR comments, issue bodies, or external file content, that content can contain instructions that redirect the agent. This is documented in OWASP's 2026 Top 10 for Agentic Applications as goal hijacking.</p>
+          <div class="insight">Safest defense: <strong>scope what Claude can read to exactly what the task requires.</strong> Feed Claude the git diff, not PR comments. If you need external content, sanitize it first — extract only structured data, not raw user-controlled text.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/hooks/sanitize-input.sh (UserPromptSubmit)</span></div>
+<pre><code class="language-bash">#!/bin/bash
+# Flag injection patterns before Claude sees the prompt
+INPUT=$(cat)
+PROMPT=$(echo "$INPUT" | jq -r '.prompt // empty')
+
+PATTERNS=("SYSTEM:" "you are now" "ignore previous"
+  "disregard" "new instructions" "override"
+  "forget everything" "as an AI without")
+
+for p in "${PATTERNS[@]}"; do
+  if echo "$PROMPT" | grep -qi "$p"; then
+    echo "{\"decision\":\"block\",
+      \"reason\":\"Potential injection: '${p}'. Verify source.\"}"
+    exit 2
+  fi
+done
+exit 0</code></pre></div>
+          <div class="code-wrap" style="margin-top:6px"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Scoped reads in CI</span></div>
+<pre><code class="language-bash"># Only source files — not PR comments or issue bodies
+DIFF=$(git diff origin/main...HEAD | head -400)
+claude -p "Review this diff only: $DIFF" \
+  --bare \
+  --allowedTools "Read(src/**),Grep,Glob(src/**)" \
+  --max-turns 5</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l3-p5" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P5</div><div><div class="pat-title">Verification-aware prompting — rubric before code</div><div class="pat-desc">Explicit done criteria as a checklist Claude must verify. Claude stops when all boxes are checked, not when it feels done.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Without done criteria: Claude decides what "done" means and declares done when it feels complete. With explicit criteria: Claude runs tests, checks types, validates specific behaviors — and doesn't stop until all boxes are checked.</p>
+          <div class="insight">The Stop hook (run tests before Claude can stop) is the automated version. The verification prompt is the manual version — use it when you need more nuanced criteria than "all tests pass."</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Verification-aware task prompt</span></div>
+<pre><code class="language-markdown">Implement the rate-limiting middleware.
+
+DONE means ALL of the following are true:
+[ ] pnpm test src/middleware/rateLimit.test.ts
+    exits 0 with no failures
+[ ] pnpm build exits 0, no TypeScript errors
+[ ] Rate limit headers on every response:
+    X-RateLimit-Limit, X-RateLimit-Remaining,
+    X-RateLimit-Reset
+[ ] Redis connection failure → graceful degradation
+    to in-memory fallback (test: kill Redis mid-request)
+[ ] Per-route configurable limits (not just global)
+[ ] No secrets or connection strings hardcoded
+
+Do not declare done until you confirm each box
+by running the relevant verification command.</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+  </div><!-- /patterns -->
+</section>
+
+<!-- THE LINE -->
+<div class="the-line">
+  <div class="line-tag">▸ The Line</div>
+  <div class="line-h">Agents → <em>Infrastructure</em></div>
+  <p class="line-p">Below this point you stop using Claude Code and start building systems that run it. Your agents are services. Your MCP servers are APIs. Your prompt cache is a cost center. Your audit logs are compliance artifacts. The question changes from "how do I prompt this?" to "how do I design this?"</p>
+</div>
+
+<!-- ══════════ LEVEL 4 ══════════ -->
+<section id="l4" class="level" style="--lc:var(--l4);--lc-bg:var(--l4bg);--lc-br:var(--l4br)">
+  <div class="lv-head">
+    <span class="lv-num">04</span>
+    <span class="lv-badge-text">Build</span>
+    <span class="lv-name-text">Agent engineering</span>
+    <span class="lv-own">You own the runtime</span>
+  </div>
+  <p class="lv-tag-text">Agent SDK, custom MCP servers, prompt caching, typed contracts, durable execution, token economics, governance. Your application drives the agent loop — not a human in a terminal.</p>
+
+  <div class="the-test">
+    <div class="test-lbl">The Level 4 Test</div>
+    <div class="test-q">"Is a human driving the agent — or is your application? If it's your application, you need the SDK. Do you have audit logs, budget caps, and security that doesn't depend on prompt instructions?"</div>
+  </div>
+
+  <div class="sec-lbl">Primitives</div>
+  <div class="prims-grid">
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Claude Agent SDK</div><div class="prim-d">Same runtime as Claude Code. Programmatic control: your app drives the loop. npm install @anthropic-ai/claude-agent-sdk.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Custom MCP servers</div><div class="prim-d">Internal APIs as typed tool surfaces. Intent-grouped tools — not 1:1 API mirrors. Past ~15 tools, selection accuracy drops.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Prompt caching</div><div class="prim-d">Static content first, dynamic last. 40-90% token cost reduction on repeated agent calls. Min 1,024 token threshold.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Session resumption</div><div class="prim-d">Save sessionId and resume across calls. Carries agent state through network interruptions and long-running tasks.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">Tool search</div><div class="prim-d">Withholds tool definitions from context until needed. 50 tools configured; 3-5 loaded per turn. Enabled by default in SDK.</div></div></div>
+    <div class="prim"><div class="prim-dot"></div><div><div class="prim-n">message.subtype</div><div class="prim-d">Check subtype not is_error. Known SDK bug: is_error doesn't correctly flag max-turns termination as an error.</div></div></div>
+  </div>
+
+  <div class="sec-lbl">Patterns</div>
+  <div class="patterns">
+
+    <div id="l4-p1" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P1</div><div><div class="pat-title">Agent SDK — budgeted run with model routing</div><div class="pat-desc">Programmatic loop with per-run USD ceiling, kill switch, and automatic model selection by task type.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">The Agent SDK is the same runtime that powers Claude Code — exposed as a library your application controls. The query() function returns an async iterator; each message is a step in the agent loop.</p>
+          <div class="insight"><strong>Model routing is the primary cost lever.</strong> Opus for deep reasoning (orchestration, complex debugging). Sonnet for standard work (implementation, review). Haiku for high-volume narrow tasks (classification, extraction, routing). The Spiral pattern: Haiku as coordinator + Opus as specialist = frontier quality at ~1/5 the all-Opus cost.</div>
+          <p class="pat-text" style="margin-top:9px">As of June 15 2026: Agent SDK usage on Pro/Max/Team/Enterprise plans draws from a separate monthly Agent SDK credit. $20/month on Pro, $200 on Max 20x. Separate from interactive Claude Code limits.</p>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">agent-runner.ts</span></div>
+<pre><code class="language-typescript">import { query, ClaudeAgentOptions }
+  from "@anthropic-ai/claude-agent-sdk";
+
+function selectModel(task: string): string {
+  if (/architect|plan|audit|complex/i.test(task))
+    return "claude-opus-4-6";   // Deep reasoning
+  if (/classify|extract|route/i.test(task))
+    return "claude-haiku-4-5";  // High-volume narrow
+  return "claude-sonnet-4-6";   // Safe default
+}
+
+async function budgetedRun(
+  prompt: string, maxUsd = 0.50
+): Promise<string> {
+  let spent = 0; let result = "";
+
+  for await (const msg of query({
+    prompt,
+    options: new ClaudeAgentOptions({
+      model: selectModel(prompt),
+      systemPrompt: STATIC_SYSTEM_PROMPT, // Always cached
+      allowedTools: ["Read","Grep","Glob",
+        "mcp__internal__get_project_status"],
+      maxTurns: 20,
+    })
+  })) {
+    const m = msg as any;
+    if (m.usage) {
+      spent += (m.usage.input_tokens * 0.000003)
+             + (m.usage.output_tokens * 0.000015);
+      if (spent > maxUsd)
+        throw new Error(`Budget exceeded: $${spent.toFixed(4)}`);
+    }
+    // Always check subtype, NEVER is_error (known bug)
+    if (m.type === "result") {
+      if (m.subtype === "error_max_turns")
+        console.warn("Hit turn limit");
+      result = m.result ?? "";
+    }
+  }
+  return result;
+}</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l4-p2" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P2</div><div><div class="pat-title">Intent-grouped MCP server — not a 1:1 API mirror</div><div class="pat-desc">Design tools around tasks, not endpoints. One rich tool beats four primitives that the model has to orchestrate.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">The primary leverage point at Level 4 is <strong>tool design, not model selection or prompt quality.</strong> Vague tool docstrings kill selection accuracy. Past ~15 tools, accuracy degrades measurably.</p>
+          <p class="pat-text" style="margin-top:9px">For APIs with hundreds of endpoints (AWS, Kubernetes, Cloudflare), use the dispatcher pattern: one tool accepts a script, runs it in a sandbox against your API, returns only the result. Cloudflare covers ~2,500 endpoints with two tools.</p>
+          <div class="insight"><strong>Write tool descriptions as if briefing a new engineer.</strong> "Get data" is useless. "Fetch the last 30 days of Stripe charges for a customer ID, returning an array with amount, status, and created_at" makes the model pick the right tool every time.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">mcp-server/internal.ts</span></div>
+<pre><code class="language-typescript">import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+const server = new McpServer({name:"internal",version:"1.0.0"});
+
+// ONE intent-grouped tool — NOT getProject + getStatus + getMetrics
+server.tool(
+  "get_project_status",
+  `Get current status, health metrics, and active blockers
+  for a project. Use when answering questions about project
+  health or before generating status reports.`,
+  { projectId: z.string().describe("Project ID e.g. 'proj-1234'") },
+  async ({ projectId }) => {
+    const [project, metrics, blockers] = await Promise.all([
+      fetchProject(projectId),
+      fetchMetrics(projectId),
+      fetchActiveBlockers(projectId),
+    ]);
+    return {content:[{type:"text",
+      text: JSON.stringify({project,metrics,blockers},null,2)
+    }]};
+  }
+);
+
+// Dispatcher pattern for large APIs
+server.tool(
+  "execute_api_script",
+  `Execute TypeScript against the internal API.
+  The script receives 'api' as a pre-authenticated client.
+  Use when the targeted operation isn't covered above.`,
+  { script: z.string(), timeout_ms: z.number().default(10000) },
+  async ({ script, timeout_ms }) => {
+    const result = await sandboxedExec(script, {api}, timeout_ms);
+    return {content:[{type:"text",text:JSON.stringify(result)}]};
+  }
+);
+await server.connect(new StdioServerTransport());</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l4-p3" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P3</div><div><div class="pat-title">Prompt caching — static content first, always</div><div class="pat-desc">40-90% token cost reduction. The invariant: dynamic content in the system prompt breaks the cache on every call.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Prompt caching reuses previously computed KV attention tensors for repeated prompt prefixes. For agents that resend the same system prompt across dozens of API calls, caching eliminates the bulk of computation cost.</p>
+          <div class="insight"><strong>The invariant: the moment you put dynamic content (task IDs, timestamps, user names) into the system prompt, you break the cache on every single call.</strong> Cache-friendly means: system prompt never changes, tool definitions never change, current task is always at the end in the user message.</div>
+          <p class="pat-text" style="margin-top:9px">Minimum cache threshold: 1,024 tokens for most models. Design your system prompt to exceed this — usually easy given architecture context, tool descriptions, and examples.</p>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Cache-friendly vs cache-breaking</span></div>
+<pre><code class="language-typescript">// ✅ Cache-friendly: static prefix, dynamic suffix
+const STATIC_SYSTEM = `
+You are a security auditor for [Company].
+[Role definition — never changes]
+[Architecture context — never changes]
+[Tool descriptions — never changes]
+[Few-shot examples — never changes]
+`; // Entire block cached after first call
+
+for await (const msg of query({
+  // Dynamic content goes in the user message:
+  prompt: `Audit this file: ${filePath}\n${fileContent}`,
+  options: new ClaudeAgentOptions({
+    systemPrompt: STATIC_SYSTEM, // ✅ Cached
+  })
+}));
+
+// ❌ Cache-breaking — miss on every call
+const BAD_SYSTEM = `
+You are auditing task: ${taskId}    // ❌
+Requested by: ${user.name}          // ❌
+At: ${new Date().toISOString()}     // ❌
+`;</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l4-p4" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P4</div><div><div class="pat-title">Durable execution with phase checkpoints</div><div class="pat-desc">Long-running tasks that survive interruption. Resume from the last successful phase, not from the beginning.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Standard agent runs fail silently on timeout, network error, or context overflow. Durable execution means the agent can be interrupted at any point and resumed without re-doing completed work.</p>
+          <div class="insight">The critical property: each phase must be <strong>idempotent</strong>. Running phase 3 twice produces the same result as running it once. This lets you safely retry failed phases without fear of duplicate records, double sends, or inconsistent state.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">durable-runner.ts</span></div>
+<pre><code class="language-typescript">import fs from "fs";
+const CKPT = ".agent-checkpoint.json";
+
+async function durableRun(phases: AgentPhase[]) {
+  let ckpt = fs.existsSync(CKPT)
+    ? JSON.parse(fs.readFileSync(CKPT,"utf8"))
+    : { completedPhases: [], sessionId: undefined };
+
+  for (const phase of phases) {
+    if (ckpt.completedPhases.includes(phase.id)) {
+      console.log(`Skip completed: ${phase.id}`);
+      continue;
+    }
+    try {
+      const result = await runPhase(phase, ckpt.sessionId);
+      if (!ckpt.sessionId && result.sessionId)
+        ckpt.sessionId = result.sessionId; // Persist for resumption
+
+      ckpt.completedPhases.push(phase.id);
+      fs.writeFileSync(CKPT, JSON.stringify(ckpt,null,2));
+    } catch(e) {
+      console.error(`Phase ${phase.id} failed. Re-run same command to resume.`);
+      throw e;
+    }
+  }
+  fs.unlinkSync(CKPT); // Clean up on success
+}</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+    <div id="l4-p5" class="pat" onclick="togglePat(this)">
+      <div class="pat-hdr"><div class="pat-left"><div class="pat-idx">P5</div><div><div class="pat-title">Governance — audit trail, security posture, shadow MCP</div><div class="pat-desc">Every tool call logged. Centralized .mcp.json. Security built around hard boundaries, not prompt instructions.</div></div></div><div class="pat-tog">+</div></div>
+      <div class="pat-body"><div class="pat-content"><div class="pat-grid">
+        <div>
+          <p class="pat-text">Critical security truth: <strong>CLAUDE.md constraints are advisory only. --allowedTools is the only hard enforcement boundary.</strong> Design your security posture around technical limits, not prompt instructions that the model might not follow.</p>
+          <p class="pat-text" style="margin-top:9px">The Shadow MCP Problem: MCP adoption begins with a few developers and scales to dozens managing hundreds of connections — each configured locally with different credentials. No central visibility. Fix: commit a single .mcp.json to the repo. That file is the source of truth. Review changes to it like code changes.</p>
+          <div class="insight">Three non-negotiable principles:<br><strong>1. Least privilege per task</strong> — each invocation gets only the tools it needs.<br><strong>2. Human checkpoints at irreversible boundaries</strong> — production deploys, external sends, DB mutations.<br><strong>3. Observability before autonomy</strong> — full audit trail before expanding agent permissions.</div>
+        </div>
+        <div>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/settings.json (audit logging)</span></div>
+<pre><code class="language-json">{
+  "hooks": {
+    "PostToolUse": [{"hooks":[{"type":"command","async":true,
+      "command":"jq -c '{ts:now|todate,session:env.CLAUDE_SESSION_ID,tool:.tool_name,status:\"ok\"}' >> ~/.claude/audit.jsonl"
+    }]}],
+    "PostToolUseFailure": [{"hooks":[{"type":"command","async":true,
+      "command":"jq -c '{ts:now|todate,session:env.CLAUDE_SESSION_ID,tool:.tool_name,status:\"error\",err:.error}' >> ~/.claude/audit.jsonl"
+    }]}]
+  }
+}</code></pre></div>
+          <div class="code-wrap" style="margin-top:6px"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.mcp.json (team-committed registry)</span></div>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "internal": {"command":"npx",
+      "args":["tsx","mcp-servers/internal/index.ts"],
+      "env":{"API_KEY":"${INTERNAL_API_KEY}"}
+    },
+    "linear": {"command":"npx",
+      "args":["-y","@linear/mcp-server"],
+      "env":{"LINEAR_API_KEY":"${LINEAR_API_KEY}"}
+    }
+  }
+}</code></pre></div>
+        </div>
+      </div></div></div>
+    </div>
+
+  </div><!-- /patterns -->
+</section>
+
+<!-- ══════════ ELITE ══════════ -->
+<section id="elite">
+  <div class="elite-head">
+    <div class="elite-tag">⚡ Cutting edge · SOTA · May 2026</div>
+    <div class="elite-title">Elite patterns.<br><em>What most guides skip.</em></div>
+    <p class="elite-sub">Hook types almost nobody uses. Community tools with 177k stars. SDK reliability bugs. The patterns that distinguish production agent engineering from advanced Claude Code usage.</p>
+  </div>
+
+  <div class="elite-cards">
+
+    <div id="e1" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E1</div><div><div class="ec-title">Agent hooks — AI-driven verification decisions</div><div class="ec-desc">Spawn a full subagent with tool access to make verification calls. More thorough than prompt hooks, slower.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">Four hook handler types: <strong>command</strong> (shell script), <strong>HTTP</strong> (webhook POST), <strong>prompt</strong> (single LLM yes/no), and <strong>agent</strong> (spawns a subagent with Read/Grep/Glob to make verification decisions). Agent hooks can explore the codebase before deciding — something no other hook type can do.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Agent hook on Stop — verifies tests before allowing stop</span></div>
+<pre><code class="language-json">{
+  "hooks": {
+    "Stop": [{"hooks":[{
+      "type": "agent",
+      "prompt": "Verify all unit tests pass. Run the test suite. Check for TypeScript errors. Return ok:true only if everything passes. Include failing test names in your reason if not.",
+      "timeout": 120
+    }]}],
+    "SubagentStop": [{"matcher":"code-reviewer","hooks":[{
+      "type": "agent",
+      "prompt": "Review the code-reviewer's findings. Are they specific, actionable, and free of false positives? If the review is vague or flags correct code, return ok:false with reason.",
+      "timeout": 60
+    }]}]
+  }
+}</code></pre></div>
+        <p class="ec-text">Use <strong>prompt hooks</strong> when input data alone is enough to decide (30s default timeout). Use <strong>agent hooks</strong> when the decision requires codebase exploration (60s default). Use <strong>command hooks</strong> for deterministic checks — they handle 80% of cases and are fastest.</p>
+      </div></div>
+    </div>
+
+    <div id="e2" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E2</div><div><div class="ec-title">mcp_tool hooks — invoke MCP tools from hooks (v2.1.118)</div><div class="ec-desc">A fifth hook handler type. Delegate validation logic to your MCP server tools directly.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">New in v2.1.118: hook handlers that invoke a configured MCP tool directly. The hook input (tool name, tool input, session context) is passed as the MCP tool's arguments. If your validation logic already lives in an MCP server, you don't need to duplicate it as a shell script.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">mcp_tool hook — delegate to MCP server</span></div>
+<pre><code class="language-json">{
+  "hooks": {
+    "PreToolUse": [{"matcher":"Write|Edit","hooks":[{
+      "type": "mcp_tool",
+      "server": "internal",
+      "tool": "validate_file_edit"
+    }]}],
+    "Stop": [{"hooks":[{
+      "type": "mcp_tool",
+      "server": "ci-gateway",
+      "tool": "run_quality_gates"
+    }]}]
+  }
+}</code></pre></div>
+        <p class="ec-text">The MCP tool receives the same JSON the hook receives on stdin and returns the same <code>{decision, reason, additionalContext}</code> format. The cleanest approach when you're already running MCP servers and want centralized validation logic.</p>
+      </div></div>
+    </div>
+
+    <div id="e3" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E3</div><div><div class="ec-title">SubagentStop — cross-agent quality gates</div><div class="ec-desc">Fire when any subagent completes. Block it from returning until quality passes. Keep it working.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">SubagentStop fires when a subagent finishes, before it returns results to the main agent. Returning <code>decision: "block"</code> keeps the subagent running and delivers the reason as its next instruction. This enables automated quality loops without the main agent needing to orchestrate the retry explicitly.</p>
+        <p class="ec-text">SubagentStop hooks receive: <code>agent_id</code>, <code>agent_type</code>, <code>agent_transcript_path</code>, and critically <strong>last_assistant_message</strong> — the subagent's final output text, available without parsing the transcript file.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">SubagentStop quality gate for code-reviewer agent</span></div>
+<pre><code class="language-bash">#!/bin/bash
+INPUT=$(cat)
+AGENT_TYPE=$(echo "$INPUT" | jq -r '.agent_type')
+LAST_MSG=$(echo "$INPUT" | jq -r '.last_assistant_message')
+
+if [ "$AGENT_TYPE" != "code-reviewer" ]; then exit 0; fi
+
+# Require file:line references in every finding
+if ! echo "$LAST_MSG" | grep -qE '[a-zA-Z]+\.[a-zA-Z]+:[0-9]+'; then
+  echo "{\"decision\":\"block\",
+    \"reason\":\"Review lacks file:line references. Every issue must cite exact location.\"}"
+  exit 2
+fi
+
+# Require CRITICAL/IMPORTANT/SUGGESTION severity levels
+if ! echo "$LAST_MSG" | grep -qE 'CRITICAL|IMPORTANT|SUGGESTION'; then
+  echo "{\"decision\":\"block\",
+    \"reason\":\"Review must use severity levels: CRITICAL/IMPORTANT/SUGGESTION.\"}"
+  exit 2
+fi
+exit 0</code></pre></div>
+      </div></div>
+    </div>
+
+    <div id="e4" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E4</div><div><div class="ec-title">Async hooks — fire and forget without blocking</div><div class="ec-desc">async: true runs hooks in background. Logging and backup never add latency to Claude's execution.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">Released January 2026: <code>async: true</code> on any hook handler runs it in the background without blocking Claude's execution. Hook fires, Claude continues, hook result is ignored (success or failure doesn't affect the session).</p>
+        <p class="ec-text">Use async for: audit logging, session backups (PreCompact), Slack notifications, metrics collection. <strong>Never async for security gates</strong> — those must block synchronously. An async security hook provides zero protection.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Async logging alongside sync formatting</span></div>
+<pre><code class="language-json">{
+  "hooks": {
+    "PostToolUse": [{"matcher":"Write|Edit","hooks":[
+      {"type":"command","async":true,
+        "command":"jq -c '{ts:now|todate,tool:.tool_name}' >> ~/.claude/audit.jsonl"},
+      {"type":"command","async":false,
+        "command":"npx prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\" 2>/dev/null || true"}
+    ]}]
+  }
+}</code></pre></div>
+        <p class="ec-text">Both hooks fire on the same event. The audit log writes asynchronously — zero latency impact. Prettier runs synchronously — Claude waits for clean output before continuing.</p>
+      </div></div>
+    </div>
+
+    <div id="e5" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E5</div><div><div class="ec-title">HTTP hooks — enterprise webhook integration</div><div class="ec-desc">POST hook events to an endpoint. Connect to internal validation services, approval systems, or audit infrastructure.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">Instead of shell scripts, HTTP hooks POST the event's JSON to a URL and read the response for the decision. Non-2xx responses produce non-blocking errors by default — to actually block, return 2xx with <code>{decision: "block"}</code> in the response body.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">HTTP hook — enterprise security gateway</span></div>
+<pre><code class="language-json">{
+  "hooks": {
+    "PreToolUse": [{"matcher":"Bash","hooks":[{
+      "type": "http",
+      "url": "https://security-gateway.internal/claude/pre-tool",
+      "timeout": 5000,
+      "headers": {
+        "Authorization": "Bearer $GATEWAY_TOKEN",
+        "X-Session-ID": "$CLAUDE_SESSION_ID"
+      },
+      "allowedEnvVars": ["GATEWAY_TOKEN"]
+    }]}]
+  }
+}</code></pre></div>
+        <p class="ec-text">The gateway receives the full tool call context and returns allow/block decisions with reasons. This moves security enforcement to your own infrastructure — auditable, centralized, and version-controlled alongside your security policies.</p>
+      </div></div>
+    </div>
+
+    <div id="e6" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E6</div><div><div class="ec-title">Superpowers framework — 177k stars, official plugin</div><div class="ec-desc">Ships an opinionated engineering culture as a folder of markdown. Works across 6 runtimes without modification.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">Created by Jesse Vincent (obra) in October 2025. 177,000+ GitHub stars by May 2026. Accepted into the official Anthropic Claude Code plugin marketplace January 15, 2026. Works across Claude Code, Cursor, Gemini CLI, GitHub Copilot CLI, Codex CLI, and OpenCode — same files, no modifications.</p>
+        <p class="ec-text"><strong>The core bet:</strong> what AI coding agents are missing is not capability but discipline — and discipline can be distributed as plain text. A session-start hook injects a bootstrap document (&lt;2,000 tokens) telling Claude to check for relevant skills before every task.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Install + core workflow</span></div>
+<pre><code class="language-bash"># Install via official marketplace
+/plugin install superpowers@obra
+
+# Core workflow skills:
+/brainstorm   # Structured idea → spec via questions
+/write-plan   # Spec → ordered task list with tests
+/execute-plan # Fresh subagent per task
+              # Each: implement → test → review → merge
+
+# TDD enforcement: skill deletes any code written
+# before a failing test exists. RED → GREEN → REFACTOR
+# is non-negotiable in Superpowers.
+
+# What it ships: 20+ coordinated SDLC skills,
+# production-ready hooks, git worktree isolation
+# per task, two-stage review before merge.</code></pre></div>
+      </div></div>
+    </div>
+
+    <div id="e7" class="ec" onclick="toggleEc(this)">
+      <div class="ec-hdr"><div class="ec-left"><div class="ec-num">E7</div><div><div class="ec-title">Compound engineering — the mindset that separates teams</div><div class="ec-desc">Every session makes the next better. The six-month CLAUDE.md is worth more than any prompt technique.</div></div></div><div class="ec-tog">+</div></div>
+      <div class="ec-body"><div class="ec-content">
+        <p class="ec-text">Boris Cherny's philosophy: treat CLAUDE.md as a compound interest vehicle. Every wrong assumption Claude makes is an opportunity to prevent it permanently. Every repeated correction is a missed hook or skill.</p>
+        <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">The compound loop</span></div>
+<pre><code class="language-markdown">WHEN Claude makes a wrong assumption:
+  → Don't just fix the output
+  → Ask: what to add to CLAUDE.md to prevent this?
+  → Encode it immediately, commit with the fix
+
+WHEN you correct the same issue twice:
+  → It's not a CLAUDE.md problem — it's a hook problem
+  → Make it deterministic, not advisory
+
+WHEN a workflow recurs more than twice:
+  → It's not a conversation problem — it's a skill problem
+  → Package it once, invoke it forever
+
+WHEN a session goes wrong:
+  → Write the root cause to MEMORY.md
+  → Add the WHY to CLAUDE.md so the next session
+    starts with that knowledge already encoded
+
+Result at 6 months:
+  A CLAUDE.md + hooks + skills setup encoding
+  6 months of your team's hard-won decisions.
+  Every session starts smarter than the last.
+  Teams running this loop compound.
+  Teams that don't stay flat.</code></pre></div>
+      </div></div>
+    </div>
+
+
+  </div><!-- /elite-cards -->
+</section>
+
+<!-- ══════════ SKILLS & FRAMEWORKS ══════════ -->
+<section id="skills">
+  <div class="elite-head">
+    <div class="elite-tag">◈ Skills &amp; Frameworks · May 2026</div>
+    <div class="elite-title">Skills &amp; Frameworks.<br><em>What to install on day one.</em></div>
+    <p class="elite-sub">The community skills, official plugins, and framework-specific configurations that give Claude institutional knowledge your codebase can't provide on its own. Organized by audience: everyone, C#/.NET teams, and Blazor developers.</p>
+  </div>
+
+  <!-- ── Community Arsenal ── -->
+  <div id="skills-community" class="sf-section" style="--sf-c:var(--elite);--sf-bg:var(--elitebg);--sf-br:var(--elitebr)">
+    <div class="sf-head">
+      <span class="sf-badge">Community</span>
+      <span class="sf-name">Community arsenal</span>
+    </div>
+    <p class="sf-desc">The skills every developer team should evaluate regardless of stack. These encode workflow discipline, design quality, and live documentation access that Claude doesn't have out of the box.</p>
+    <div class="skill-cards">
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">S1</div><div>
+          <div class="sk-title">obra/Superpowers <span class="sk-tag stars">177k ⭐</span><span class="sk-tag community">official plugin</span></div>
+          <div class="sk-desc">Ships an opinionated engineering culture as markdown. TDD-enforced SDLC across 6 runtimes.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">The most-installed community skill. Works identically across Claude Code, Cursor, Gemini CLI, GitHub Copilot CLI, Codex, and OpenCode — same files, no changes. A session-start hook injects a bootstrap document (&lt;2,000 tokens) telling Claude to check for relevant skills before every task.</p>
+          <p class="sk-text">Core workflow: <strong>/brainstorm</strong> (idea → spec via questions) → <strong>/write-plan</strong> (spec → task list with tests) → <strong>/execute-plan</strong> (fresh subagent per task, two-stage review before merge). TDD is non-negotiable: the skill deletes code written before a failing test exists.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Install</span></div>
+<pre><code class="language-bash">/plugin install superpowers@obra
+# Or: npx skills add obra/superpowers
+
+# Core workflow commands after install:
+/brainstorm    # Structured idea refinement
+/write-plan    # Spec → ordered task list
+/execute-plan  # Parallel subagent execution
+/using-superpowers  # Remind Claude skills are available</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">S2</div><div>
+          <div class="sk-title">Anthropic frontend-design <span class="sk-tag official">official</span><span class="sk-tag stars">277k installs</span></div>
+          <div class="sk-desc">Design system + aesthetic direction before any UI code. Prevents generic AI-looking output.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">The official Anthropic UI skill. Before writing any frontend code, it commits Claude to a bold aesthetic direction — typography, color palette, spatial composition. The result is UI that looks designed rather than generated. Without it, Claude defaults to the same predictable Inter-font, purple-gradient output.</p>
+          <p class="sk-text">Also consider the <strong>Vercel UI quality skill</strong> as a companion: audits your UI code against 100+ rules covering accessibility, performance, and UX. WCAG 2.1 compliance, semantic HTML, visible focus states, touch target sizes, keyboard navigation. Think of frontend-design as the creative direction skill and Vercel as the quality gate skill.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Install</span></div>
+<pre><code class="language-bash">npx skills add anthropics/claude-code --skill frontend-design
+
+# Invoke explicitly or auto-triggers on UI tasks:
+/frontend-design  # Describe what you want to build
+
+# Vercel quality gate companion:
+npx skills add vercel/claude-code-skills
+/ui-review  # Audits current code against 100+ rules</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">S3</div><div>
+          <div class="sk-title">Context7 MCP <span class="sk-tag community">MCP server</span></div>
+          <div class="sk-desc">Live, version-accurate library documentation pulled into Claude's context at query time. No stale training data.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">Claude's training data goes stale the moment a library ships a new version. Context7 solves this: it intercepts library-related questions, fetches current documentation from the source, and injects it into Claude's context before answering. The result is accurate API usage even for libraries that post-date Claude's training cutoff.</p>
+          <p class="sk-text">Works across 10,000+ libraries including React, Next.js, Tailwind, Prisma, Drizzle, tRPC, and every major .NET package. Particularly valuable for fast-moving ecosystems where the docs change between Claude's training cycles.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.mcp.json — add Context7</span></div>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@context7/mcp@latest"]
+    }
+  }
+}
+// Then use naturally in session:
+// "How do I set up Drizzle with Turso? use context7"
+// Claude fetches current docs before answering</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">S4</div><div>
+          <div class="sk-title">BMAD — spec-driven SDLC framework <span class="sk-tag community">community</span></div>
+          <div class="sk-desc">Guides Claude through product design and spec before a single line of code. Finds contradictions before they become bugs.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">BMAD (Brain Mapping and Agentic Development) is a spec-driven framework that forces requirements clarity before implementation begins. It runs structured brainstorming sessions, identifies contradictions in the spec, and validates progress against the spec during implementation — flagging when Claude drifts from the agreed design.</p>
+          <p class="sk-text">Key differentiator from Superpowers: BMAD focuses specifically on pre-implementation — product design, user flows, edge case hunting, adversarial spec review. Use BMAD for the design phase, Superpowers for the execution phase. The combination covers the full SDLC with structured validation at every gate.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">BMAD core commands</span></div>
+<pre><code class="language-bash"># Install
+npx skills add bmad-method/bmad-claude-code
+
+# Workflow:
+/brainstorm   # Generate user flows you didn't know you needed
+/doc-sharding # Break PRD into vertical implementation slices
+/validate     # Check implementation against spec
+/adversarial  # Find security and edge case gaps in design
+
+# Pair with Superpowers:
+# BMAD: design → spec → validation plan
+# Superpowers: spec → tasks → subagent execution</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">S5</div><div>
+          <div class="sk-title">Antigravity Awesome Skills <span class="sk-tag community">registry</span><span class="sk-tag stars">1,234+ skills</span></div>
+          <div class="sk-desc">The largest curated skill library. Install by role bundle: Web Wizard, Backend Engineer, Full-Stack, DevOps.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">Community-maintained library of 1,234+ agentic skills in the universal SKILL.md format. Compatible with Claude Code, Cursor, Gemini CLI, and Codex CLI without modification. Install the whole library or specific bundles by role.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Install by role bundle</span></div>
+<pre><code class="language-bash"># Install all (1,234+ skills):
+npx antigravity-awesome-skills --claude
+
+# Or install role bundles:
+npx antigravity-awesome-skills --bundle web-wizard
+# Includes: frontend-design, api-design-principles,
+#           lint-and-validate, create-pr
+
+npx antigravity-awesome-skills --bundle backend
+# Includes: api-design, database-patterns,
+#           security-review, test-coverage
+
+# List installed:
+npx skills list</code></pre></div>
+        </div></div>
+      </div>
+
+    </div><!-- /skill-cards community -->
+  </div><!-- /sf-section community -->
+
+  <!-- ── C# / .NET ── -->
+  <div id="skills-csharp" class="sf-section" style="--sf-c:#512BD4;--sf-bg:rgba(81,43,212,0.07);--sf-br:rgba(81,43,212,0.28)">
+    <div class="sf-head">
+      <span class="sf-badge" style="color:#512BD4;border-color:rgba(81,43,212,.35);background:rgba(81,43,212,.08)">C# / .NET</span>
+      <span class="sf-name">C# &amp; .NET</span>
+    </div>
+    <p class="sf-desc">Official and community skills from the teams that ship the .NET platform. CLAUDE.md templates, dotnet-specific hooks, and specialist agents for async patterns, EF Core, and ASP.NET Core.</p>
+    <div class="skill-cards">
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">N1</div><div>
+          <div class="sk-title">dotnet/skills <span class="sk-tag dotnet">official .NET team</span></div>
+          <div class="sk-desc">First-party skills from the team that ships the platform. Same workflows they use internally.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">Published by the official Microsoft .NET team. These are the workflows the platform team uses on their own codebases — not generic prompts, but validated patterns for modern .NET development. Supports Claude Code, GitHub Copilot CLI, and VS Code.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Install + key skills</span></div>
+<pre><code class="language-bash"># Install official .NET skills
+npx skills add dotnet/skills
+
+# Key skills included:
+# dotnet-project-structure    — Solution layout conventions
+# dotnet-local-tools          — tool manifest and restore
+# package-management          — NuGet versioning, CPM
+# serialization               — System.Text.Json patterns
+# OpenTelemetry-NET           — Instrumentation patterns
+# dotnet-devcert-trust        — Dev cert setup
+# dotnet-slopwatch            — Quality gate: flags AI slop</code></pre></div>
+          <div class="insight" style="border-color:#512BD4;background:rgba(81,43,212,0.07)"><strong>dotnet-slopwatch</strong> is unique: it's a quality gate skill that detects AI-generated anti-patterns specifically — unnecessary wrapper classes, methods that do one thing and add no value, over-abstraction for its own sake. Run it after any substantial AI-generated code before committing.</div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">N2</div><div>
+          <div class="sk-title">Aaronontheweb/dotnet-skills <span class="sk-tag dotnet">30 specialist skills</span></div>
+          <div class="sk-desc">30 skills + 5 specialist agents. Routes by task: async, EF Core, middleware, testing, benchmarks.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">A comprehensive battle-tested skill collection with explicit routing: each skill defines when to use it and when NOT to use it (routing to a different specialist instead). The result is Claude reliably picking the right skill for the task rather than using a generic C# approach.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Skill routing — add to CLAUDE.md</span></div>
+<pre><code class="language-markdown">## Agent Guidance: dotnet-skills
+Prefer retrieval-led reasoning for any .NET work.
+Workflow: skim repo patterns → consult dotnet-skills
+by name → implement smallest-change → note conflicts.
+
+Routing by task type:
+- C#/code quality: modern-csharp-coding-standards,
+  csharp-concurrency-patterns, type-design-performance
+- EF Core: efcore-patterns, database-performance
+- ASP.NET Core: aspire-service-defaults, middleware-patterns
+- Testing: testcontainers-integration-tests,
+  playwright-blazor-testing, snapshot-testing
+- Quality gates: dotnet-slopwatch, crap-analysis
+
+Specialist agents:
+- dotnet-concurrency-specialist (async/await, Channels)
+- dotnet-performance-analyst (profiling, BenchmarkDotNet)
+- dotnet-benchmark-designer (measurement correctness)</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">N3</div><div>
+          <div class="sk-title">CLAUDE.md template for ASP.NET Core</div>
+          <div class="sk-desc">Production-ready CLAUDE.md for Clean Architecture .NET projects. Ready to adapt and commit.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">CLAUDE.md — ASP.NET Core / Clean Architecture</span></div>
+<pre><code class="language-markdown"># [Project Name]
+
+## Identity
+ASP.NET Core 8+ API. Clean Architecture: Domain,
+Application, Infrastructure, Presentation layers.
+EF Core 8 + SQL Server. MediatR for CQRS. xUnit tests.
+
+## Commands — use these exactly
+- Build: `dotnet build`
+- Test: `dotnet test`
+- Test single: `dotnet test --filter "FullyQualifiedName~[TestName]"`
+- Format: `dotnet format`
+- Run: `dotnet run --project src/API`
+- EF migrate: `dotnet ef migrations add [Name] -p src/Infrastructure`
+
+## Architecture rules
+- Commands/Queries ONLY in Application layer (MediatR)
+- Domain logic ONLY in Domain layer — no framework deps
+- Infrastructure layer: EF Core, external services, repos
+- Presentation layer: Controllers, minimal APIs, DTOs only
+- No direct DbContext outside Infrastructure layer
+
+## C# style (C# 12 / .NET 8+)
+- Primary constructors for DI (prefer over field injection)
+- Records for immutable DTOs and value objects
+- Pattern matching over type casting — always
+- Collection expressions: [..list] over new List<T>(list)
+- Nullable reference types enabled — no #nullable disable
+- ConfigureAwait(false) on all library awaits
+- Cancellation tokens on all async public methods
+
+## Known wrong defaults
+- NEVER use int for IDs — use Guid or strongly-typed IDs
+- NEVER return Domain entities from API — use DTOs/response types
+- NEVER catch Exception — catch specific exceptions
+- NEVER use async void — use async Task
+- ALWAYS use ILogger<T>, never Console.WriteLine
+- ALWAYS use ProblemDetails for error responses (RFC 9110)
+
+## Testing conventions
+- Test project mirrors src structure: Application.Tests, etc.
+- Use xUnit + FluentAssertions + NSubstitute (not Moq)
+- Integration tests use WebApplicationFactory + Testcontainers
+- Test names: MethodName_StateUnderTest_ExpectedBehavior
+
+@docs/architecture-decisions.md
+@docs/domain-glossary.md</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">N4</div><div>
+          <div class="sk-title">.NET hooks — build, test, format enforcement</div>
+          <div class="sk-desc">dotnet format on every file edit. dotnet build before Claude stops. xUnit test gate on Stop hook.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">.claude/settings.json — .NET hooks</span></div>
+<pre><code class="language-json">{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)", "Bash(dotnet test:*)",
+      "Bash(dotnet format:*)", "Bash(dotnet run:*)",
+      "Bash(dotnet ef:*)", "Bash(git status)",
+      "Bash(git diff:*)", "Bash(git add:*)",
+      "Bash(git commit:*)", "Read", "Glob", "Grep"
+    ],
+    "ask": ["Bash(git push:*)"],
+    "deny": [
+      "Read(./*.env)", "Read(./secrets/**)",
+      "Bash(dotnet ef database drop:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Write|Edit|MultiEdit",
+      "hooks": [{"type":"command",
+        "command": "FILE=\"$CLAUDE_TOOL_INPUT_FILE_PATH\"; [[ \"$FILE\" == *.cs ]] && dotnet format --include \"$FILE\" 2>/dev/null || true"
+      }]
+    }],
+    "Stop": [{"hooks":[{"type":"command",
+      "command": "INPUT=$(cat); [ \"$(echo $INPUT|jq -r '.stop_hook_active')\" = 'true' ] && exit 0; dotnet build --no-restore -q 2>&1 | tail -5 && dotnet test --no-build -q 2>&1 | tail -8 || exit 2"
+    }]}],
+    "PreToolUse": [{"matcher":"Bash","hooks":[{"type":"command",
+      "command": "CMD=$(cat | jq -r '.tool_input.command // empty'); echo \"$CMD\" | grep -qiE 'database drop|rm -rf|del /f' && echo 'Blocked: destructive command' >&2 && exit 2; exit 0"
+    }]}]
+  }
+}</code></pre></div>
+        </div></div>
+      </div>
+
+    </div><!-- /skill-cards csharp -->
+  </div><!-- /sf-section csharp -->
+
+  <!-- ── Blazor ── -->
+  <div id="skills-blazor" class="sf-section" style="--sf-c:#6B2FBA;--sf-bg:rgba(107,47,186,0.07);--sf-br:rgba(107,47,186,0.28)">
+    <div class="sf-head">
+      <span class="sf-badge" style="color:#6B2FBA;border-color:rgba(107,47,186,.35);background:rgba(107,47,186,.08)">Blazor</span>
+      <span class="sf-name">Blazor</span>
+    </div>
+    <p class="sf-desc">.NET 8+ Blazor has four distinct render modes — Claude needs to know which you're using or it generates code for the wrong one. These patterns cover component architecture, state management, JS interop, and the render-mode-specific patterns Claude consistently gets wrong without explicit guidance.</p>
+    <div class="skill-cards">
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">B1</div><div>
+          <div class="sk-title">Blazor skills — community skill options</div>
+          <div class="sk-desc">Blazor Framework Quick Reference and Blazor Expert skills. Cover all four render modes, lifecycle, state management.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">Two community Blazor skills worth installing. <strong>Blazor Framework Quick Reference</strong> covers .NET 8+ render modes (Server, WebAssembly, Auto, and Static SSR), component lifecycle, and Fluent UI components. <strong>Blazor Expert</strong> focuses on state management patterns, JS interop, authentication configuration, and virtualization performance.</p>
+          <p class="sk-text">The dotnet-skills collection (N2) includes a dedicated <code>dotnet-blazor-specialist</code> agent and <code>playwright-blazor-testing</code> skill — use these for Blazor-specific work within the broader .NET workflow.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Install Blazor skills</span></div>
+<pre><code class="language-bash"># Via Claude Code plugin marketplace:
+/plugin install blazor-quick-reference
+
+# Via skills registry:
+npx skills add claudskills/blazor-framework
+npx skills add claudskills/blazor-expert
+
+# dotnet-skills Blazor agent (if dotnet-skills installed):
+# Ask Claude: "Use the dotnet-blazor-specialist agent
+# to review this component's render mode choice"</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">B2</div><div>
+          <div class="sk-title">CLAUDE.md template for Blazor projects</div>
+          <div class="sk-desc">Render mode declarations, component conventions, StateHasChanged rules, and JS interop patterns Claude must know upfront.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">CLAUDE.md — Blazor Web App (.NET 8+)</span></div>
+<pre><code class="language-markdown"># [Project Name] — Blazor
+
+## Identity
+Blazor Web App .NET 8+. Render mode: [Server / WASM / Auto / Static SSR].
+Architecture: component library in Shared/, pages in Pages/,
+services registered in Program.cs via DI.
+Fluent UI Blazor Components for UI primitives.
+
+## Render mode — CRITICAL
+This project uses: [Auto render mode]
+- Static SSR: no interactivity, use for SEO-critical pages
+- Server: real-time, SignalR connection, OnInitializedAsync runs on server
+- WebAssembly: runs in browser, no direct server access
+- Auto: Server first load, WASM on subsequent loads
+
+## Commands
+- Build: `dotnet build`
+- Run: `dotnet run --project src/BlazorApp`
+- Test: `dotnet test`
+- Watch: `dotnet watch run --project src/BlazorApp`
+- Publish WASM: `dotnet publish -c Release`
+
+## Component conventions
+- Page components: @page directive, in Pages/ folder
+- Reusable components: in Components/ or Shared/
+- Parameters: [Parameter] attribute, PascalCase names
+- Cascading: [CascadingParameter] — use sparingly
+- EventCallbacks: EventCallback<T> not Action<T>
+- Dispose: implement IDisposable for event subscriptions
+
+## State management rules
+- Component state: private fields + StateHasChanged()
+- StateHasChanged(): call only after async operations
+- NEVER call StateHasChanged() in synchronous loops
+- Shared state: scoped services or Flux/Fluxor pattern
+- Server mode: scoped = per-circuit, NOT per-request
+
+## Known wrong defaults
+- NEVER use JSRuntime in OnInitializedAsync on Server mode
+  (use OnAfterRenderAsync(bool firstRender) instead)
+- NEVER inject HttpClient directly in Server mode
+  (use IHttpClientFactory with named clients)
+- ALWAYS use @key directive in foreach loops with components
+- NEVER mutate [Parameter] values — use callbacks
+- ALWAYS await InvokeAsync(StateHasChanged) from background threads
+- Use CancellationToken in all async component methods
+
+## JS Interop rules
+- Use IJSRuntime.InvokeAsync for JS calls from C#
+- Use DotNetObjectReference for callbacks from JS to C#
+- Dispose DotNetObjectReference — it's a memory leak if not
+- Prefer CSS/Blazor solutions over JS interop
+
+@docs/component-library.md
+@docs/state-patterns.md</code></pre></div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">B3</div><div>
+          <div class="sk-title">Blazor patterns Claude gets wrong without guidance</div>
+          <div class="sk-desc">Render mode confusion, lifecycle mistakes, JS interop errors, and StateHasChanged misuse — all preventable with CLAUDE.md.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">Claude knows Blazor but defaults to patterns from older .NET versions or conflates Server/WASM behavior. These are the recurring mistakes teams see before hardening their CLAUDE.md:</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Anti-patterns to add to CLAUDE.md</span></div>
+<pre><code class="language-markdown">## Blazor wrong defaults — correct immediately
+
+### Lifecycle
+WRONG: using OnInitializedAsync for JS calls in Server mode
+RIGHT: use OnAfterRenderAsync(bool firstRender) for JS interop
+WHY: DOM doesn't exist during OnInitializedAsync on Server
+
+WRONG: calling StateHasChanged() from a Timer callback directly
+RIGHT: await InvokeAsync(StateHasChanged) from background threads
+WHY: Blazor components must be updated on the render thread
+
+WRONG: not disposing event subscriptions
+RIGHT: implement IDisposable, unsubscribe in Dispose()
+WHY: Server mode keeps components alive for the circuit lifetime
+
+### Render mode confusion
+WRONG: accessing HttpContext in WASM or Auto mode
+RIGHT: HTTP calls via IHttpClientFactory, never HttpContext
+WHY: HttpContext only exists on the server
+
+WRONG: using scoped services as if they're per-request in Server
+RIGHT: scoped services are per-circuit (entire user session)
+WHY: Server mode uses SignalR circuits, not HTTP requests
+
+### Component patterns
+WRONG: @bind-Value without @bind-Value:event="oninput"
+       when real-time validation is needed
+RIGHT: use both when immediate feedback matters
+WRONG: mutating [Parameter] properties directly
+RIGHT: use EventCallback to notify parent of changes</code></pre></div>
+          <div class="insight" style="border-color:#6B2FBA;background:rgba(107,47,186,0.07)">The most impactful Blazor addition to CLAUDE.md: <strong>explicitly declare your render mode in the Identity section.</strong> Without it, Claude writes generic Blazor code that may work in one render mode and silently fail in another. One line prevents hours of debugging.</div>
+        </div></div>
+      </div>
+
+      <div class="sk" onclick="toggleSk(this)">
+        <div class="sk-hdr"><div class="sk-left"><div class="sk-num">B4</div><div>
+          <div class="sk-title">Blazor testing with Playwright + Testcontainers</div>
+          <div class="sk-desc">End-to-end Blazor tests with playwright-blazor-testing skill. Integration tests with real databases via Testcontainers.</div>
+        </div></div><div class="sk-tog">+</div></div>
+        <div class="sk-body"><div class="sk-content">
+          <p class="sk-text">The <code>playwright-blazor-testing</code> skill from dotnet-skills guides Claude through writing Playwright tests for Blazor-specific patterns: component rendering, interactive events, form submissions, and navigation. The <code>testcontainers-integration-tests</code> skill handles integration tests with real SQL Server or PostgreSQL containers.</p>
+          <div class="code-wrap"><div class="code-hdr"><div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div><span class="code-fn">Blazor testing setup + skill routing</span></div>
+<pre><code class="language-bash"># Install dotnet-skills (includes Blazor testing skills)
+npx skills add Aaronontheweb/dotnet-skills
+
+# Add to CLAUDE.md for auto-routing:
+# Testing: playwright-blazor-testing, testcontainers-integration-tests
+# Claude will automatically use these skills when writing tests
+
+# Invoke directly:
+# "Write Playwright tests for the LoginComponent
+#  using playwright-blazor-testing skill"
+
+# "Write integration tests for UserRepository
+#  using testcontainers-integration-tests skill
+#  with SQL Server container"</code></pre></div>
+          <p class="sk-text">For bUnit (unit testing Blazor components in-process), add to CLAUDE.md: <em>"For component unit tests, use bUnit with FluentAssertions. Test files mirror component paths with .Tests suffix. Use TestContext.RenderComponent&lt;T&gt;() and wait for DOM updates with WaitForState()."</em></p>
+        </div></div>
+      </div>
+
+    </div><!-- /skill-cards blazor -->
+  </div><!-- /sf-section blazor -->
+
+</section><!-- /skills -->
+
+<div class="footer">
+  <span class="ft-brand">claude-code-mastery · May 2026 · CC v2.1.x · obra/superpowers 177k stars</span>
+  <span class="ft-meta">Anthropic docs · Boris Cherny · dotnet/skills (Microsoft) · Aaronontheweb/dotnet-skills · Code with Claude SF 2026</span>
+</div>
+
+</main>
+</div><!-- /layout -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+hljs.highlightAll();
+
+function togglePat(el) { el.classList.toggle('open') }
+function toggleEc(el) { el.classList.toggle('open') }
+function toggleSk(el) { el.classList.toggle('open') }
+
+// IntersectionObserver — highlight sidebar link for visible section
+const sections = document.querySelectorAll('section[id], div.overview[id]');
+const allLinks = document.querySelectorAll('.sn-lv, .sn-p, .sn-elite');
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const id = e.target.id;
+    allLinks.forEach(l => {
+      const href = l.getAttribute('href');
+      if (href === '#' + id) l.classList.add('active');
+      else l.classList.remove('active');
+    });
+  });
+}, { rootMargin: '-44px 0px -55% 0px', threshold: 0 });
+
+sections.forEach(s => obs.observe(s));
+
+// Also observe individual pattern cards for sidebar links
+const pats = document.querySelectorAll('.pat[id], .ec[id]');
+const patObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const id = e.target.id;
+    document.querySelectorAll('.sn-p').forEach(l => {
+      if (l.getAttribute('href') === '#' + id) l.classList.add('active');
+      else l.classList.remove('active');
+    });
+  });
+}, { rootMargin: '-44px 0px -60% 0px', threshold: 0 });
+pats.forEach(p => patObs.observe(p));
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const map = {'1':'l1','2':'l2','3':'l3','4':'l4'};
+  if (map[e.key]) {
+    document.getElementById(map[e.key]).scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  if (e.key==='e'||e.key==='E') {
+    document.getElementById('elite').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  if (e.key==='s'||e.key==='S') {
+    document.getElementById('skills').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+});
+</script>
+</body>
+</html>
