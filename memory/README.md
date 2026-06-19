@@ -16,6 +16,8 @@ Agent memory systems — how an agent persists and recalls knowledge beyond a si
 - [Reconcile at write time and forget on purpose](memory-conflict-and-forgetting.md)
 - [Poisoning & governance — memory as an attack surface](memory-poisoning-and-governance.md)
 - [Evaluating agent memory](evaluating-agent-memory.md)
+- [Procedural memory — agents that rewrite their own instructions & skills](procedural-memory-self-rewriting.md)
+- [Self-editing is the riskiest write — gate it with evals](self-editing-is-the-riskiest-write.md)
 
 ## Repos to watch
 

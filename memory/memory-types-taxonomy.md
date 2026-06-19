@@ -33,5 +33,5 @@ Each type wants a different mechanism: episodic → append-only log + scored ret
 
 ## Notes
 
-- Comes after the [[memory-vs-context-vs-rag]] decision; backend choice is [[memory-architecture-tradeoffs]].
+- Comes after the [[memory-vs-context-vs-rag]] decision; backend choice is [[memory-architecture-tradeoffs]]. Procedural memory the agent edits itself is [[procedural-memory-self-rewriting]] — gate it per [[self-editing-is-the-riskiest-write]].
 - Terminology flag: the non-weight side is variously called "non-parametric" / "textual" / "contextual" across surveys — "non-parametric" is the safest shared term. The distinction originates in the 2020 RAG paper.
