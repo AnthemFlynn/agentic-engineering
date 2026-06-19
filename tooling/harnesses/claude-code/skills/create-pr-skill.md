@@ -39,4 +39,4 @@ Invoke: `/create-pr PAY-891 Stripe webhook handler` → reads the diff, emits a 
 
 ## Notes
 
-- A Claude Code skill (`SKILL.md` + frontmatter, `user-invocable`, `argument-hint`). Genuinely cross-harness skill-authoring concepts, if any arise, live in [../../skills/](../../skills/).
+- A Claude Code skill (`SKILL.md` + frontmatter, `user-invocable`, `argument-hint`). Genuinely cross-harness skill-authoring concepts, if any arise, live in [../../../skills/](../../../skills/).
