@@ -4,6 +4,7 @@
 ![Notes](https://img.shields.io/badge/notes-56-2EA043)
 ![Format](https://img.shields.io/badge/format-atomic%20%C2%B7%20wiki--linked-0969DA)
 ![Content](https://img.shields.io/badge/content-markdown-000000)
+[![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey)](LICENSE)
 
 > A curated, source-cited knowledge base of patterns, tips, and hard-won lessons for **building and operating AI agents** — harness design, prompting, evals, orchestration, model economics, and the tooling around them.
 
@@ -41,3 +42,7 @@ This is an **independent, unofficial** knowledge base, not affiliated with any v
 4. Link related notes inline with `[[note-slug]]` wiki-links, and add the note under the `## Notes` heading of its area README.
 
 See [CLAUDE.md](CLAUDE.md) for the authoring conventions in full.
+
+## License
+
+Licensed under [Creative Commons Attribution 4.0 International](LICENSE) (CC BY 4.0). You're free to share and adapt with attribution. Individual notes cite their upstream `source:` in frontmatter — those original works remain under their own terms; please preserve that credit when reusing.
