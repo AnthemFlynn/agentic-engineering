@@ -56,3 +56,4 @@ The body follows the template's sections: **Takeaway → When it applies → Why
 - Treat outdated or disproven entries as bugs: correct or remove them; don't let stale advice sit next to current advice.
 - To add a new area: create the directory with a scope `README.md`, then add a row to the area table in the top-level `README.md`.
 - Vendor-neutral techniques go in their concept area; put something in `tooling/` only when it's genuinely tied to a specific tool.
+- Within `tooling/`, **harness-specific material lives under its harness** (e.g. all Claude-Code-specific hooks, skills, subagents, commands, and settings go in `tooling/harnesses/claude-code/`). The category folders `tooling/{hooks,skills,clis,mcps}/` are reserved for *genuinely universal / cross-harness* material. When unsure, treat it as harness-specific.

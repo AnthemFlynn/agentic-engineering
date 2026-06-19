@@ -1,18 +1,7 @@
 # Hooks
 
-Lifecycle hooks that intercept and react to the agent loop.
+Lifecycle hooks as a **cross-harness concept** — the general idea of intercepting an agent's loop to format, guard, gate, or inject context.
 
-**In scope:** hook types (PreToolUse, PostToolUse, Stop, and friends), what to wire them to (format, lint, type-check, guards, notifications), ordering, and failure handling.
+**In scope:** hook ideas and patterns that are not tied to one harness's event names or config format.
 
-**Out of scope:** harness-specific hook configuration syntax, which goes under the relevant harness (e.g. [../harnesses/claude-code/](../harnesses/claude-code/)).
-
-## Notes
-
-- [Auto-format on write (PostToolUse)](auto-format-on-write.md)
-- [Block destructive bash (PreToolUse, exit 2)](block-destructive-bash.md)
-- [Protect sensitive files (PreToolUse path guard)](protect-sensitive-files.md)
-- [Test-gate on stop (Stop hook + loop guard)](test-gate-on-stop.md)
-- [Session-start context injection](session-start-context-injection.md)
-- [PreToolUse input modification](pretooluse-input-modification.md)
-- [Prompt-injection sanitizing hook](prompt-injection-sanitizing-hook.md)
-- [Debugging hooks when they don't fire](debugging-hooks.md)
+**Out of scope:** anything Claude-Code-specific — its hook events (PreToolUse, PostToolUse, Stop, SessionStart, …), `settings.json` wiring, and script recipes all live under [../harnesses/claude-code/](../harnesses/claude-code/). In practice almost all hook material today is harness-specific and belongs there; this folder stays empty until a genuinely portable pattern emerges.
