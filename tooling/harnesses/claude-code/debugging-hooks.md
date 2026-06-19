@@ -6,7 +6,7 @@ date: 2026-06-18
 model:
 version: Claude Code v2.1.x
 tags: [claude-code, hooks, debugging]
-source: claude-code-pro-playbook.md (Debugging hooks section)
+source: claude-code-pro-playbook.md (Debugging hooks section); claude-code-mastery-v3_2.html (Level 1, P2)
 ---
 
 ## Takeaway
@@ -34,6 +34,11 @@ echo '{"tool_name":"Bash","tool_input":{"command":"rm -rf dist"},"session_id":"t
 ```
 
 Common causes: matcher regex doesn't match the case-sensitive tool name (`Write`, `Edit`, `Bash`); script not executable (`chmod +x .claude/hooks/*.sh`); `jq` parse failure; Stop-hook infinite loop missing the `stop_hook_active` guard.
+
+## Exit codes & performance
+
+- **Exit codes:** `0` = allow, `2` = block (and `exit 2` blocks *even in* bypassPermissions mode), `1` = warn and continue. A security hook must `exit 2` or it provides no enforcement.
+- **200 ms budget:** PreToolUse/PostToolUse hooks fire on every matched tool call — keep each under ~200 ms or the session degrades. Profile with `time` before deploying; push latency-tolerant work to [[async-hooks]].
 
 ## Notes
 

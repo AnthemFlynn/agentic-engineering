@@ -6,7 +6,7 @@ date: 2026-06-18
 model:
 version:
 tags: [claude-code, hooks, security, prompt-injection]
-source: claude-code-staff-engineer-patterns.md (Pattern 8)
+source: claude-code-staff-engineer-patterns.md (Pattern 8); claude-code-mastery-v3_2.html (Level 3, P4)
 ---
 
 ## Takeaway
@@ -36,5 +36,5 @@ Pair with scoping: feed only `git diff` (not issue/comment bodies) and restrict 
 
 ## Notes
 
-- Pattern-matching is a backstop, not a guarantee — obfuscated injections slip past regex. The durable control is *scope*: [[allowed-tools-hard-contract]].
+- This is "goal hijacking" in OWASP's 2026 Top 10 for Agentic Applications. Pattern-matching is a backstop, not a guarantee — obfuscated injections slip past regex. The durable control is *scope*: [[allowed-tools-hard-contract]].
 - Redirect-style enforcement sibling: [[pretooluse-input-modification]].

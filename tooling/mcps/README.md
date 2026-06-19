@@ -9,3 +9,4 @@ Model Context Protocol servers — connecting agents to external tools, data, an
 ## Notes
 
 - [MCP turns an assistant into an operator](mcp-assistant-to-operator.md)
+- [Context7 — live library docs MCP server](context7.md)

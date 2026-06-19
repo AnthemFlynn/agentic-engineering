@@ -9,5 +9,6 @@ Full agentic harnesses — the runtimes that drive the agent loop: read context,
 | [claude-code/](claude-code/) | Anthropic's Claude Code (CLI, desktop, web, IDE). |
 | [opencode/](opencode/) | OpenCode. |
 | [codex/](codex/) | OpenAI Codex CLI. |
+| [antigravity/](antigravity/) | Agentic IDE with a bundled skills registry. |
 
 **Out of scope:** vendor-neutral loop design (→ [../../orchestration/](../../orchestration/)) and tool/observation design (→ [../../harness-design/](../../harness-design/)).
