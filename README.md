@@ -18,6 +18,7 @@ Each entry is one focused **atomic note** with [structured frontmatter](TEMPLATE
 | [evals/](evals/) | Eval-driven development, rubrics, graders, LLM-as-judge, regression testing, datasets. |
 | [orchestration/](orchestration/) | Multi-agent topologies, autonomous loops, fan-out/pipeline, DAGs, handoffs, worktrees. |
 | [models/](models/) | Model selection, routing by task complexity, cost control, prompt caching, token budgeting. |
+| [memory/](memory/) | Agent memory systems — persistence and recall beyond a single context window; retrieval, memory architectures. |
 | [tooling/](tooling/) | Tool-specific knowledge by category — [harnesses](tooling/harnesses/) (Claude Code, OpenCode, Codex, Antigravity), [plugins](tooling/plugins/), CLIs, MCP servers, skills, and hooks. |
 | [patterns/](patterns/) | Cross-cutting reusable patterns that don't belong to a single topic above. |
 

@@ -15,3 +15,4 @@ Agent skills as a **cross-harness concept** — packaged, reusable units of spec
 External skill collections worth following for reusable skills and authoring ideas:
 
 - [mattpocock/skills](https://github.com/mattpocock/skills) — Matt Pocock's collection of agent skills.
+- [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) — an AI skill providing UI/UX design intelligence across platforms.

@@ -10,3 +10,10 @@ Workflow plugins — packaged bundles that ship an opinionated workflow (skills 
 
 - [Superpowers — TDD-enforced SDLC plugin](superpowers.md)
 - [BMAD — spec-driven design plugin](bmad.md)
+
+## Repos to watch
+
+External plugins / agentic frameworks worth following:
+
+- [obra/superpowers](https://github.com/obra/superpowers) — agentic skills framework & SDLC methodology (cross-harness).
+- [affaan-m/ECC](https://github.com/affaan-m/ECC) — "Everything Claude Code": a cross-harness agent-harness optimization system (skills, instincts, memory, security) for Claude Code, Codex, OpenCode, Cursor.
